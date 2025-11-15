@@ -8,44 +8,44 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 13%;
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 13%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 13%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 4 96% 60%;
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 13%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 4 96% 60%;
+    --accent: 221 83% 53%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 4 96% 60%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 13%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 4 96% 60%;
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 221 83% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 20%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 0 0% 24%;
-    --sidebar-ring: 4 96% 60%;
+    --sidebar-accent: 217 32% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 32% 17%;
+    --sidebar-ring: 221 83% 53%;
 
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
@@ -56,56 +56,69 @@ All colors MUST be HSL.
     --info: 199 89% 48%;
     --info-foreground: 0 0% 100%;
 
-    --status-created: 0 0% 96%;
-    --status-created-foreground: 0 0% 45%;
+    --status-created: 210 40% 96%;
+    --status-created-foreground: 215 16% 47%;
     
-    --status-assigned: 4 96% 60%;
+    --status-pending: 45 93% 47%;
+    --status-pending-foreground: 0 0% 100%;
+    
+    --status-assigned: 221 83% 53%;
     --status-assigned-foreground: 0 0% 100%;
     
-    --status-in-progress: 38 92% 50%;
+    --status-in-progress: 262 83% 58%;
     --status-in-progress-foreground: 0 0% 100%;
     
     --status-completed: 142 76% 36%;
     --status-completed-foreground: 0 0% 100%;
+    
+    --status-on-hold: 38 92% 50%;
+    --status-on-hold-foreground: 0 0% 100%;
+    
+    --status-cancelled: 0 84% 60%;
+    --status-cancelled-foreground: 0 0% 100%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%), hsl(262 83% 58%));
+    --shadow-soft: 0 2px 8px -2px hsl(222 47% 11% / 0.1);
+    --shadow-medium: 0 4px 16px -4px hsl(222 47% 11% / 0.15);
   }
 
   .dark {
-    --background: 0 0% 13%;
-    --foreground: 0 0% 98%;
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 16%;
-    --card-foreground: 0 0% 98%;
+    --card: 217 32% 17%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 16%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 217 32% 17%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 4 96% 60%;
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 20%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 217 32% 22%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 0 0% 20%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 217 32% 22%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 4 96% 60%;
+    --accent: 221 83% 53%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 24%;
-    --input: 0 0% 24%;
-    --ring: 4 96% 60%;
+    --border: 217 32% 22%;
+    --input: 217 32% 22%;
+    --ring: 221 83% 53%;
 
-    --sidebar-background: 0 0% 13%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 4 96% 60%;
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 221 83% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 20%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 0 0% 24%;
-    --sidebar-ring: 4 96% 60%;
+    --sidebar-accent: 217 32% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 32% 17%;
+    --sidebar-ring: 221 83% 53%;
 
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
@@ -116,17 +129,26 @@ All colors MUST be HSL.
     --info: 199 89% 48%;
     --info-foreground: 0 0% 100%;
 
-    --status-created: 0 0% 20%;
-    --status-created-foreground: 0 0% 65%;
+    --status-created: 217 32% 22%;
+    --status-created-foreground: 215 20% 65%;
     
-    --status-assigned: 4 96% 60%;
+    --status-pending: 45 93% 47%;
+    --status-pending-foreground: 0 0% 100%;
+    
+    --status-assigned: 221 83% 53%;
     --status-assigned-foreground: 0 0% 100%;
     
-    --status-in-progress: 38 92% 50%;
+    --status-in-progress: 262 83% 58%;
     --status-in-progress-foreground: 0 0% 100%;
     
     --status-completed: 142 76% 36%;
     --status-completed-foreground: 0 0% 100%;
+    
+    --status-on-hold: 38 92% 50%;
+    --status-on-hold-foreground: 0 0% 100%;
+    
+    --status-cancelled: 0 84% 60%;
+    --status-cancelled-foreground: 0 0% 100%;
   }
 }
 
@@ -155,6 +177,47 @@ All colors MUST be HSL.
     }
     to {
       background-position: -200% 0;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hover-lift {
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .card-gradient {
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
+  }
+
+  .status-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
     }
   }
 }

@@ -13,7 +13,7 @@ export const StatusBadge = ({ status, className }: StatusBadgeProps) => {
     draft: {
       label: "Draft",
       variant: "outline" as const,
-      className: "bg-muted text-muted-foreground",
+      className: "bg-muted text-muted-foreground border-border",
     },
     created: {
       label: "Created",
@@ -22,8 +22,8 @@ export const StatusBadge = ({ status, className }: StatusBadgeProps) => {
     },
     pending: {
       label: "Pending",
-      variant: "secondary" as const,
-      className: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100",
+      variant: "default" as const,
+      className: "bg-status-pending text-status-pending-foreground",
     },
     assigned: {
       label: "Assigned",
@@ -33,7 +33,7 @@ export const StatusBadge = ({ status, className }: StatusBadgeProps) => {
     in_progress: {
       label: "In Progress",
       variant: "default" as const,
-      className: "bg-status-in-progress text-status-in-progress-foreground",
+      className: "bg-status-in-progress text-status-in-progress-foreground status-pulse",
     },
     completed: {
       label: "Completed",
@@ -43,12 +43,12 @@ export const StatusBadge = ({ status, className }: StatusBadgeProps) => {
     on_hold: {
       label: "On Hold",
       variant: "secondary" as const,
-      className: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100",
+      className: "bg-status-on-hold text-status-on-hold-foreground",
     },
     cancelled: {
       label: "Cancelled",
       variant: "destructive" as const,
-      className: "bg-destructive text-destructive-foreground",
+      className: "bg-status-cancelled text-status-cancelled-foreground",
     },
   };
 

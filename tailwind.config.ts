@@ -72,12 +72,18 @@ export default {
         status: {
           created: "hsl(var(--status-created))",
           "created-foreground": "hsl(var(--status-created-foreground))",
+          pending: "hsl(var(--status-pending))",
+          "pending-foreground": "hsl(var(--status-pending-foreground))",
           assigned: "hsl(var(--status-assigned))",
           "assigned-foreground": "hsl(var(--status-assigned-foreground))",
           "in-progress": "hsl(var(--status-in-progress))",
           "in-progress-foreground": "hsl(var(--status-in-progress-foreground))",
           completed: "hsl(var(--status-completed))",
           "completed-foreground": "hsl(var(--status-completed-foreground))",
+          "on-hold": "hsl(var(--status-on-hold))",
+          "on-hold-foreground": "hsl(var(--status-on-hold-foreground))",
+          cancelled: "hsl(var(--status-cancelled))",
+          "cancelled-foreground": "hsl(var(--status-cancelled-foreground))",
         },
         brand: {
           red: "hsl(4, 96%, 60%)",
@@ -93,23 +99,49 @@ export default {
         "accordion-down": {
           from: {
             height: "0",
+            opacity: "0",
           },
           to: {
             height: "var(--radix-accordion-content-height)",
+            opacity: "1",
           },
         },
         "accordion-up": {
           from: {
             height: "var(--radix-accordion-content-height)",
+            opacity: "1",
           },
           to: {
             height: "0",
+            opacity: "0",
+          },
+        },
+        "fade-in": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "slide-up": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
           },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.3s ease-out",
+        "slide-up": "slide-up 0.4s ease-out",
       },
     },
   },
