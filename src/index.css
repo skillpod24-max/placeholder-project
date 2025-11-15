@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 13%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 13%;
+
+    --primary: 4 96% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 13%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 4 96% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 4 96% 60%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 13%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 4 96% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 20%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 24%;
+    --sidebar-ring: 4 96% 60%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    --status-created: 0 0% 96%;
+    --status-created-foreground: 0 0% 45%;
+    
+    --status-assigned: 4 96% 60%;
+    --status-assigned-foreground: 0 0% 100%;
+    
+    --status-in-progress: 38 92% 50%;
+    --status-in-progress-foreground: 0 0% 100%;
+    
+    --status-completed: 142 76% 36%;
+    --status-completed-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 0 0% 13%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 16%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 16%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 4 96% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 4 96% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 24%;
+    --input: 0 0% 24%;
+    --ring: 4 96% 60%;
+
+    --sidebar-background: 0 0% 13%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 4 96% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 20%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 24%;
+    --sidebar-ring: 4 96% 60%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    --status-created: 0 0% 20%;
+    --status-created-foreground: 0 0% 65%;
+    
+    --status-assigned: 4 96% 60%;
+    --status-assigned-foreground: 0 0% 100%;
+    
+    --status-in-progress: 38 92% 50%;
+    --status-in-progress-foreground: 0 0% 100%;
+    
+    --status-completed: 142 76% 36%;
+    --status-completed-foreground: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+}
