@@ -30,6 +30,7 @@ serve(async (req) => {
     const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token)
     
     if (userError || !user) {
+      console.error('Authentication error:', userError)
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -39,15 +40,18 @@ serve(async (req) => {
     // Get request body
     const { email, password, name, role, company_id, vendor_id } = await req.json()
 
+    console.log('Creating user:', { email, name, role, company_id, vendor_id })
+
     // Verify user has permission (company or vendor role)
-    const { data: userRole } = await supabaseAdmin
+    const { data: userRole, error: roleError } = await supabaseAdmin
       .from('user_roles')
       .select('role, company_id')
       .eq('user_id', user.id)
       .eq('company_id', company_id)
       .single()
 
-    if (!userRole || !['company', 'vendor'].includes(userRole.role)) {
+    if (roleError || !userRole || !['company', 'vendor'].includes(userRole.role)) {
+      console.error('Permission check failed:', roleError, userRole)
       return new Response(
         JSON.stringify({ error: 'Insufficient permissions' }),
         { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -63,14 +67,17 @@ serve(async (req) => {
     })
 
     if (createError) {
+      console.error('User creation error:', createError)
       return new Response(
         JSON.stringify({ error: createError.message }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
+    console.log('User created successfully:', newUser.user.id)
+
     // Create role record
-    const { error: roleError } = await supabaseAdmin
+    const { error: roleInsertError } = await supabaseAdmin
       .from('user_roles')
       .insert({
         user_id: newUser.user.id,
@@ -78,11 +85,12 @@ serve(async (req) => {
         role
       })
 
-    if (roleError) {
+    if (roleInsertError) {
+      console.error('Role creation error:', roleInsertError)
       // Rollback user creation
       await supabaseAdmin.auth.admin.deleteUser(newUser.user.id)
       return new Response(
-        JSON.stringify({ error: roleError.message }),
+        JSON.stringify({ error: roleInsertError.message }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -99,6 +107,7 @@ serve(async (req) => {
         })
 
       if (vendorError) {
+        console.error('Vendor creation error:', vendorError)
         await supabaseAdmin.auth.admin.deleteUser(newUser.user.id)
         return new Response(
           JSON.stringify({ error: vendorError.message }),
@@ -117,6 +126,7 @@ serve(async (req) => {
         })
 
       if (workerError) {
+        console.error('Worker creation error:', workerError)
         await supabaseAdmin.auth.admin.deleteUser(newUser.user.id)
         return new Response(
           JSON.stringify({ error: workerError.message }),
@@ -125,12 +135,15 @@ serve(async (req) => {
       }
     }
 
+    console.log('User setup completed successfully')
+
     return new Response(
       JSON.stringify({ data: newUser.user }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
   } catch (error: any) {
+    console.error('Unexpected error:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
