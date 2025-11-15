@@ -22,7 +22,7 @@ interface Job {
   id: string;
   title: string;
   description: string;
-  status: "created" | "assigned" | "in_progress" | "completed";
+  status: "draft" | "created" | "pending" | "assigned" | "in_progress" | "completed" | "on_hold" | "cancelled";
   assigned_to_vendor_id: string | null;
   assigned_to_worker_id: string | null;
   assigned_to_team_id?: string | null;

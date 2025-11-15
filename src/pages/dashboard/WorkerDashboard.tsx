@@ -12,7 +12,7 @@ interface Job {
   id: string;
   title: string;
   description: string;
-  status: "created" | "assigned" | "in_progress" | "completed";
+  status: "draft" | "created" | "pending" | "assigned" | "in_progress" | "completed" | "on_hold" | "cancelled";
   created_at: string;
 }
 
