@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,52 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session?.user) {
+        // User is logged in, fetch their role and redirect
+        const { data: roleData } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session.user.id)
+          .single();
+
+        if (roleData) {
+          navigate(`/dashboard/${roleData.role}`, { replace: true });
+        }
+      }
+      
+      setCheckingAuth(false);
+    };
+
+    checkSession();
+
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session?.user) {
+          const { data: roleData } = await supabase
+            .from("user_roles")
+            .select("role")
+            .eq("user_id", session.user.id)
+            .single();
+
+          if (roleData) {
+            navigate(`/dashboard/${roleData.role}`, { replace: true });
+          }
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,28 +72,24 @@ const Auth = () => {
 
       if (error) throw error;
 
-      if (data.user) {
-        // Fetch user role to redirect properly
-        const { data: roleData } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", data.user.id)
-          .single();
-
-        if (roleData) {
-          navigate(`/dashboard/${roleData.role}`);
-        }
-      }
+      // Navigation will be handled by the auth state listener
     } catch (error: any) {
       toast({
         title: "Login failed",
-        description: error.message,
+        description: error.message || "Invalid email or password",
         variant: "destructive",
       });
-    } finally {
       setLoading(false);
     }
   };
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
