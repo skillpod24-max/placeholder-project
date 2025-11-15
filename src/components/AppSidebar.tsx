@@ -10,9 +10,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
+  SidebarHeader,
 } from "@/components/ui/sidebar";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { NotificationBell } from "@/components/NotificationBell";
 
 interface AppSidebarProps {
   role: "company" | "vendor" | "worker";
@@ -60,11 +62,14 @@ export function AppSidebar({ role }: AppSidebarProps) {
 
   return (
     <Sidebar className="border-r border-sidebar-border">
+      <SidebarHeader className="border-b border-sidebar-border px-4 py-4">
+        <div className="flex items-center justify-between">
+          <span className="text-sidebar-foreground font-bold text-lg">JobSync</span>
+          <NotificationBell />
+        </div>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-foreground font-bold text-lg px-4 py-6">
-            JobSync
-          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
