@@ -297,54 +297,54 @@ export type Database = {
       }
       jobs: {
         Row: {
-          assigned_at: string | null
-          assigned_by: string | null
           assigned_to_team_id: string | null
           assigned_to_vendor_id: string | null
           assigned_to_worker_id: string | null
           company_id: string
           created_at: string
           created_by: string
-          deadline: string | null
           description: string | null
+          end_date: string | null
           id: string
-          requirements: string | null
+          job_number: string
+          location: string | null
+          name: string
+          start_date: string | null
           status: Database["public"]["Enums"]["job_status"]
-          title: string
           updated_at: string
         }
         Insert: {
-          assigned_at?: string | null
-          assigned_by?: string | null
           assigned_to_team_id?: string | null
           assigned_to_vendor_id?: string | null
           assigned_to_worker_id?: string | null
           company_id: string
           created_at?: string
           created_by: string
-          deadline?: string | null
           description?: string | null
+          end_date?: string | null
           id?: string
-          requirements?: string | null
+          job_number: string
+          location?: string | null
+          name: string
+          start_date?: string | null
           status?: Database["public"]["Enums"]["job_status"]
-          title: string
           updated_at?: string
         }
         Update: {
-          assigned_at?: string | null
-          assigned_by?: string | null
           assigned_to_team_id?: string | null
           assigned_to_vendor_id?: string | null
           assigned_to_worker_id?: string | null
           company_id?: string
           created_at?: string
           created_by?: string
-          deadline?: string | null
           description?: string | null
+          end_date?: string | null
           id?: string
-          requirements?: string | null
+          job_number?: string
+          location?: string | null
+          name?: string
+          start_date?: string | null
           status?: Database["public"]["Enums"]["job_status"]
-          title?: string
           updated_at?: string
         }
         Relationships: [
@@ -378,60 +378,15 @@ export type Database = {
           },
         ]
       }
-      team_members: {
-        Row: {
-          added_at: string
-          added_by: string
-          id: string
-          role: string | null
-          team_id: string
-          worker_id: string
-        }
-        Insert: {
-          added_at?: string
-          added_by: string
-          id?: string
-          role?: string | null
-          team_id: string
-          worker_id: string
-        }
-        Update: {
-          added_at?: string
-          added_by?: string
-          id?: string
-          role?: string | null
-          team_id?: string
-          worker_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "team_members_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "team_members_worker_id_fkey"
-            columns: ["worker_id"]
-            isOneToOne: false
-            referencedRelation: "workers"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       team_tasks: {
         Row: {
-          assigned_at: string
-          assigned_by: string
           assigned_to_worker_id: string | null
           created_at: string
           daily_updates: Json | null
           deadline: string | null
           description: string | null
           id: string
-          job_id: string | null
-          job_task_id: string | null
+          job_task_id: string
           progress_percentage: number | null
           status: string
           team_id: string
@@ -439,16 +394,13 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          assigned_at?: string
-          assigned_by: string
           assigned_to_worker_id?: string | null
           created_at?: string
           daily_updates?: Json | null
           deadline?: string | null
           description?: string | null
           id?: string
-          job_id?: string | null
-          job_task_id?: string | null
+          job_task_id: string
           progress_percentage?: number | null
           status?: string
           team_id: string
@@ -456,16 +408,13 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          assigned_at?: string
-          assigned_by?: string
           assigned_to_worker_id?: string | null
           created_at?: string
           daily_updates?: Json | null
           deadline?: string | null
           description?: string | null
           id?: string
-          job_id?: string | null
-          job_task_id?: string | null
+          job_task_id?: string
           progress_percentage?: number | null
           status?: string
           team_id?: string
@@ -478,13 +427,6 @@ export type Database = {
             columns: ["assigned_to_worker_id"]
             isOneToOne: false
             referencedRelation: "workers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "team_tasks_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
             referencedColumns: ["id"]
           },
           {
@@ -503,45 +445,68 @@ export type Database = {
           },
         ]
       }
+      team_workers: {
+        Row: {
+          added_at: string
+          id: string
+          team_id: string
+          worker_id: string
+        }
+        Insert: {
+          added_at?: string
+          id?: string
+          team_id: string
+          worker_id: string
+        }
+        Update: {
+          added_at?: string
+          id?: string
+          team_id?: string
+          worker_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_workers_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_workers_worker_id_fkey"
+            columns: ["worker_id"]
+            isOneToOne: false
+            referencedRelation: "workers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       teams: {
         Row: {
-          company_id: string
           created_at: string
-          created_by: string
           id: string
           name: string
           team_head_id: string | null
           updated_at: string
-          vendor_id: string | null
+          vendor_id: string
         }
         Insert: {
-          company_id: string
           created_at?: string
-          created_by: string
           id?: string
           name: string
           team_head_id?: string | null
           updated_at?: string
-          vendor_id?: string | null
+          vendor_id: string
         }
         Update: {
-          company_id?: string
           created_at?: string
-          created_by?: string
           id?: string
           name?: string
           team_head_id?: string | null
           updated_at?: string
-          vendor_id?: string | null
+          vendor_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "teams_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "teams_team_head_id_fkey"
             columns: ["team_head_id"]
@@ -593,23 +558,23 @@ export type Database = {
       vendor_companies: {
         Row: {
           company_id: string
-          created_at: string | null
+          created_at: string
           id: string
-          is_active: boolean | null
+          is_active: boolean
           vendor_id: string
         }
         Insert: {
           company_id: string
-          created_at?: string | null
+          created_at?: string
           id?: string
-          is_active?: boolean | null
+          is_active?: boolean
           vendor_id: string
         }
         Update: {
           company_id?: string
-          created_at?: string | null
+          created_at?: string
           id?: string
-          is_active?: boolean | null
+          is_active?: boolean
           vendor_id?: string
         }
         Relationships: [
@@ -636,6 +601,7 @@ export type Database = {
           email: string
           id: string
           name: string
+          phone: string | null
           updated_at: string
           user_id: string
         }
@@ -645,6 +611,7 @@ export type Database = {
           email: string
           id?: string
           name: string
+          phone?: string | null
           updated_at?: string
           user_id: string
         }
@@ -654,6 +621,7 @@ export type Database = {
           email?: string
           id?: string
           name?: string
+          phone?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -674,8 +642,7 @@ export type Database = {
           email: string
           id: string
           name: string
-          role: string | null
-          team_role: string | null
+          phone: string | null
           updated_at: string
           user_id: string
           vendor_id: string | null
@@ -686,8 +653,7 @@ export type Database = {
           email: string
           id?: string
           name: string
-          role?: string | null
-          team_role?: string | null
+          phone?: string | null
           updated_at?: string
           user_id: string
           vendor_id?: string | null
@@ -698,8 +664,7 @@ export type Database = {
           email?: string
           id?: string
           name?: string
-          role?: string | null
-          team_role?: string | null
+          phone?: string | null
           updated_at?: string
           user_id?: string
           vendor_id?: string | null
@@ -726,10 +691,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_user_companies: { Args: { _user_id: string }; Returns: string[] }
       has_role: {
         Args: {
-          _company_id: string
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
@@ -738,7 +701,13 @@ export type Database = {
     }
     Enums: {
       app_role: "company" | "vendor" | "worker"
-      job_status: "created" | "assigned" | "in_progress" | "completed"
+      job_status:
+        | "draft"
+        | "pending"
+        | "in_progress"
+        | "completed"
+        | "on_hold"
+        | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -867,7 +836,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["company", "vendor", "worker"],
-      job_status: ["created", "assigned", "in_progress", "completed"],
+      job_status: [
+        "draft",
+        "pending",
+        "in_progress",
+        "completed",
+        "on_hold",
+        "cancelled",
+      ],
     },
   },
 } as const
