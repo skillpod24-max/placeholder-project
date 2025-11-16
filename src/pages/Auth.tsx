@@ -41,9 +41,9 @@ const Auth = () => {
     checkSession();
 
     // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user) {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        setTimeout(async () => {
           const { data: roleData } = await supabase
             .from("user_roles")
             .select("role")
@@ -53,9 +53,9 @@ const Auth = () => {
           if (roleData) {
             navigate(`/dashboard/${roleData.role}`, { replace: true });
           }
-        }
+        }, 0);
       }
-    );
+    });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
