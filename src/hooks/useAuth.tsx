@@ -59,23 +59,23 @@ export const useAuth = () => {
     initAuth();
 
     // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, newSession) => {
-        console.log("Auth state changed:", event);
-        
-        setSession(newSession);
-        setUser(newSession?.user ?? null);
-        
-        if (newSession?.user && event !== 'SIGNED_OUT') {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, newSession) => {
+      console.log("Auth state changed:", event);
+      
+      setSession(newSession);
+      setUser(newSession?.user ?? null);
+      
+      if (newSession?.user && event !== 'SIGNED_OUT') {
+        setTimeout(async () => {
           const role = await fetchUserRole(newSession.user.id);
           setUserRole(role);
-        } else {
-          setUserRole(null);
-        }
-        
+          setLoading(false);
+        }, 0);
+      } else {
+        setUserRole(null);
         setLoading(false);
       }
-    );
+    });
 
     return () => {
       subscription.unsubscribe();
