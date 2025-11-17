@@ -137,6 +137,36 @@ const VendorJobs = () => {
     setDialogOpen(true);
   };
 
+  const handleMarkComplete = async (jobId: string) => {
+    const { error } = await supabase
+      .from("jobs")
+      .update({ status: "completed" })
+      .eq("id", jobId);
+
+    if (error) {
+      toast({
+        title: "Error updating job",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Create activity log
+    await supabase.from("job_activities").insert({
+      job_id: jobId,
+      user_id: user?.id,
+      activity_type: "status_change",
+      description: "Job marked as completed by vendor",
+      new_status: "completed",
+    });
+
+    toast({
+      title: "Job marked as completed",
+    });
+    fetchVendorJobsAndWorkers();
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -170,7 +200,13 @@ const VendorJobs = () => {
                     <TableCell>
                       <StatusBadge status={job.status} />
                     </TableCell>
-                    <TableCell>{new Date(job.created_at).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      {new Date(job.created_at).toLocaleDateString()} at{" "}
+                      {new Date(job.created_at).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
                         <Button
@@ -181,15 +217,29 @@ const VendorJobs = () => {
                         >
                           <ListTodo className="h-4 w-4" />
                         </Button>
-                        {!job.assigned_to_worker_id && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => openAssignDialog(job.id)}
-                            title="Assign to Worker"
-                          >
-                            <UserPlus className="h-4 w-4" />
-                          </Button>
+                        {job.status !== "completed" && job.status !== "cancelled" && (
+                          <>
+                            {!job.assigned_to_worker_id && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => openAssignDialog(job.id)}
+                                title="Assign to Worker"
+                              >
+                                <UserPlus className="h-4 w-4" />
+                              </Button>
+                            )}
+                            {job.status === "in_progress" && (
+                              <Button
+                                size="sm"
+                                variant="default"
+                                className="bg-success text-success-foreground hover:bg-success/90"
+                                onClick={() => handleMarkComplete(job.id)}
+                              >
+                                Complete
+                              </Button>
+                            )}
+                          </>
                         )}
                       </div>
                     </TableCell>

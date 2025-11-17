@@ -70,6 +70,7 @@ export type Database = {
           created_at: string
           email: string | null
           id: string
+          industry: string | null
           name: string
           updated_at: string
         }
@@ -77,6 +78,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
+          industry?: string | null
           name: string
           updated_at?: string
         }
@@ -84,6 +86,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
+          industry?: string | null
           name?: string
           updated_at?: string
         }
@@ -219,6 +222,7 @@ export type Database = {
           assigned_to_team_id: string | null
           assigned_to_worker_id: string | null
           created_at: string
+          custom_fields: Json | null
           daily_updates: Json | null
           deadline: string | null
           description: string | null
@@ -236,6 +240,7 @@ export type Database = {
           assigned_to_team_id?: string | null
           assigned_to_worker_id?: string | null
           created_at?: string
+          custom_fields?: Json | null
           daily_updates?: Json | null
           deadline?: string | null
           description?: string | null
@@ -253,6 +258,7 @@ export type Database = {
           assigned_to_team_id?: string | null
           assigned_to_worker_id?: string | null
           created_at?: string
+          custom_fields?: Json | null
           daily_updates?: Json | null
           deadline?: string | null
           description?: string | null
@@ -305,6 +311,7 @@ export type Database = {
           company_id: string
           created_at: string
           created_by: string
+          custom_fields: Json | null
           deadline: string | null
           description: string | null
           id: string
@@ -322,6 +329,7 @@ export type Database = {
           company_id: string
           created_at?: string
           created_by: string
+          custom_fields?: Json | null
           deadline?: string | null
           description?: string | null
           id?: string
@@ -339,6 +347,7 @@ export type Database = {
           company_id?: string
           created_at?: string
           created_by?: string
+          custom_fields?: Json | null
           deadline?: string | null
           description?: string | null
           id?: string
@@ -371,6 +380,97 @@ export type Database = {
           },
           {
             foreignKeyName: "jobs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resource_allocations: {
+        Row: {
+          allocated_at: string | null
+          allocated_by: string
+          entity_id: string
+          entity_type: string
+          id: string
+          notes: string | null
+          quantity: number | null
+          released_at: string | null
+          resource_id: string | null
+        }
+        Insert: {
+          allocated_at?: string | null
+          allocated_by: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          notes?: string | null
+          quantity?: number | null
+          released_at?: string | null
+          resource_id?: string | null
+        }
+        Update: {
+          allocated_at?: string | null
+          allocated_by?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          notes?: string | null
+          quantity?: number | null
+          released_at?: string | null
+          resource_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resource_allocations_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resources: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          custom_fields: Json | null
+          id: string
+          name: string
+          quantity: number | null
+          status: string | null
+          type: string
+          unit: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          custom_fields?: Json | null
+          id?: string
+          name: string
+          quantity?: number | null
+          status?: string | null
+          type: string
+          unit?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          custom_fields?: Json | null
+          id?: string
+          name?: string
+          quantity?: number | null
+          status?: string | null
+          type?: string
+          unit?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resources_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"

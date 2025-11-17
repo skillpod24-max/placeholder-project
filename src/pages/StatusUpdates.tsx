@@ -35,6 +35,7 @@ interface StatusUpdate {
   request_id?: string;
   responder_name?: string;
   responder_role?: string;
+  job_name?: string;
 }
 
 export default function StatusUpdates() {
@@ -88,11 +89,43 @@ export default function StatusUpdates() {
     }
 
     if (data) {
-      // Fetch responder details for each update
+      // Fetch responder details and job names for each update
       const updatesWithDetails = await Promise.all(
         data.map(async (update) => {
           let responderName = "Unknown";
           let responderRole = "Unknown";
+          let jobName = "";
+
+          // Fetch job name if entity is job_task
+          if (update.entity_type === "job_task") {
+            const { data: taskData } = await supabase
+              .from("job_tasks")
+              .select("job_id")
+              .eq("id", update.entity_id)
+              .single();
+
+            if (taskData) {
+              const { data: jobData } = await supabase
+                .from("jobs")
+                .select("title")
+                .eq("id", taskData.job_id)
+                .single();
+
+              if (jobData) {
+                jobName = jobData.title;
+              }
+            }
+          } else if (update.entity_type === "job") {
+            const { data: jobData } = await supabase
+              .from("jobs")
+              .select("title")
+              .eq("id", update.entity_id)
+              .single();
+
+            if (jobData) {
+              jobName = jobData.title;
+            }
+          }
 
           if (userRole?.role === "company") {
             const { data: vendorData } = await supabase
@@ -122,6 +155,7 @@ export default function StatusUpdates() {
             ...update,
             responder_name: responderName,
             responder_role: responderRole,
+            job_name: jobName,
           };
         })
       );
@@ -271,13 +305,24 @@ export default function StatusUpdates() {
                   <Card key={update.id} className="mb-4 hover:shadow-md transition-shadow border-l-4 border-l-accent">
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <User className="h-5 w-5 text-accent" />
-                          {update.responder_name}
-                        </CardTitle>
+                        <div className="space-y-1">
+                          <CardTitle className="text-lg flex items-center gap-2">
+                            <User className="h-5 w-5 text-accent" />
+                            {update.responder_name}
+                          </CardTitle>
+                          {update.job_name && (
+                            <p className="text-sm text-muted-foreground">
+                              Job: {update.job_name}
+                            </p>
+                          )}
+                        </div>
                         <Badge variant="outline">
                           <Clock className="h-3 w-3 mr-1" />
-                          {new Date(update.created_at).toLocaleString()}
+                          {new Date(update.created_at).toLocaleDateString()} at{" "}
+                          {new Date(update.created_at).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                         </Badge>
                       </div>
                     </CardHeader>
@@ -287,7 +332,7 @@ export default function StatusUpdates() {
                         <Badge variant="outline">{update.entity_type.toUpperCase()}</Badge>
                       </div>
                       <Separator />
-                      <div className="bg-muted p-4 rounded-lg">
+                      <div className="bg-muted/50 p-4 rounded-lg">
                         <p className="text-sm font-medium mb-2">Response:</p>
                         <p className="text-sm">{update.notes}</p>
                       </div>
@@ -343,7 +388,11 @@ export default function StatusUpdates() {
                     </CardTitle>
                     <Badge variant="outline">
                       <Clock className="h-3 w-3 mr-1" />
-                      {new Date(request.created_at).toLocaleString()}
+                      {new Date(request.created_at).toLocaleDateString()} at{" "}
+                      {new Date(request.created_at).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </Badge>
                   </div>
                 </CardHeader>
