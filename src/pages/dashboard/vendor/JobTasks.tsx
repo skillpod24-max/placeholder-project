@@ -66,6 +66,41 @@ const VendorJobTasks = () => {
     }
   }, [user, userRole, jobId]);
 
+  const handleUpdateTaskStatus = async (taskId: string, newStatus: string, currentProgress: number) => {
+    const newProgress = newStatus === "completed" ? 100 : newStatus === "in_progress" ? Math.max(currentProgress, 25) : 0;
+    
+    const { error } = await supabase
+      .from("job_tasks")
+      .update({ 
+        status: newStatus,
+        progress_percentage: newProgress
+      })
+      .eq("id", taskId);
+
+    if (error) {
+      toast({
+        title: "Error updating task",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    await supabase.from("activity_logs").insert({
+      entity_type: "job_task",
+      entity_id: taskId,
+      user_id: user?.id || "",
+      action_type: "status_change",
+      old_value: "pending",
+      new_value: newStatus,
+      progress_percentage: newProgress,
+      notes: `Task status updated by vendor`,
+    });
+
+    toast({ title: "Task updated successfully" });
+    fetchJobAndTasks();
+  };
+
   const fetchJobAndTasks = async () => {
     if (!user || !userRole?.company_id || !jobId) return;
 
@@ -308,11 +343,24 @@ const VendorJobTasks = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {tasks.map((task) => (
+                 {tasks.map((task) => (
                   <TableRow key={task.id} className="cursor-pointer hover:bg-muted/50">
                     <TableCell className="font-medium">{task.title}</TableCell>
                     <TableCell>
-                      <StatusBadge status={task.status as any} />
+                      <Select
+                        value={task.status}
+                        onValueChange={(value) => handleUpdateTaskStatus(task.id, value, (task as any).progress_percentage || 0)}
+                      >
+                        <SelectTrigger className="w-[140px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="in_progress">In Progress</SelectItem>
+                          <SelectItem value="completed">Completed</SelectItem>
+                          <SelectItem value="on_hold">On Hold</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">

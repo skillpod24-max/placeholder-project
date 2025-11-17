@@ -24,6 +24,7 @@ const Settings = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [profileInfo, setProfileInfo] = useState<ProfileInfo | null>(null);
+  const [timezone, setTimezone] = useState("UTC");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -46,28 +47,30 @@ const Settings = () => {
     let vendorName = "";
     let teamName = "";
 
-    // Get role-specific info
+    // Get role-specific info and timezone
     if (userRole.role === "vendor") {
       const { data: vendorData } = await supabase
         .from("vendors")
-        .select("name")
+        .select("name, timezone")
         .eq("user_id", user.id)
         .eq("company_id", userRole.company_id)
         .single();
       
       if (vendorData) {
         name = vendorData.name;
+        setTimezone(vendorData.timezone || "UTC");
       }
     } else if (userRole.role === "worker") {
       const { data: workerData } = await supabase
         .from("workers")
-        .select("name, vendor_id, team_role")
+        .select("name, vendor_id, team_role, timezone")
         .eq("user_id", user.id)
         .eq("company_id", userRole.company_id)
         .single();
       
       if (workerData) {
         name = workerData.name;
+        setTimezone(workerData.timezone || "UTC");
 
         // Get vendor name if exists
         if (workerData.vendor_id) {
@@ -144,6 +147,34 @@ const Settings = () => {
     }
 
     setLoading(false);
+  };
+
+  const handleTimezoneUpdate = async () => {
+    if (!user || !userRole) return;
+
+    setLoading(true);
+
+    const table = userRole.role === "vendor" ? "vendors" : "workers";
+    const { error } = await supabase
+      .from(table)
+      .update({ timezone })
+      .eq("user_id", user.id);
+
+    setLoading(false);
+
+    if (error) {
+      toast({
+        title: "Error updating timezone",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Success",
+      description: "Timezone updated successfully",
+    });
   };
 
   return (
@@ -275,6 +306,45 @@ const Settings = () => {
           </form>
         </CardContent>
       </Card>
+
+      {(userRole?.role === "vendor" || userRole?.role === "worker") && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Timezone Settings</CardTitle>
+            <CardDescription>Set your local timezone for accurate time display</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="timezone">Your Timezone</Label>
+                <select
+                  id="timezone"
+                  value={timezone}
+                  onChange={(e) => setTimezone(e.target.value)}
+                  className="w-full mt-2 px-3 py-2 border rounded-md bg-background"
+                >
+                  <option value="UTC">UTC</option>
+                  <option value="America/New_York">Eastern Time (ET)</option>
+                  <option value="America/Chicago">Central Time (CT)</option>
+                  <option value="America/Denver">Mountain Time (MT)</option>
+                  <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                  <option value="Europe/London">London (GMT)</option>
+                  <option value="Europe/Paris">Paris (CET)</option>
+                  <option value="Asia/Dubai">Dubai (GST)</option>
+                  <option value="Asia/Kolkata">India (IST)</option>
+                  <option value="Asia/Shanghai">China (CST)</option>
+                  <option value="Asia/Tokyo">Japan (JST)</option>
+                  <option value="Australia/Sydney">Sydney (AEDT)</option>
+                </select>
+              </div>
+              <Button onClick={handleTimezoneUpdate} disabled={loading}>
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                Update Timezone
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
