@@ -158,11 +158,21 @@ const WorkerJobTasks = () => {
                   <div className="flex flex-wrap items-center gap-4 text-sm">
                     <div className="flex items-center gap-2">
                       <span className="font-medium">Status:</span>
-                      <span className={`px-2 py-1 rounded ${
-                        task.status === 'completed' ? 'bg-success/10 text-success' :
-                        task.status === 'in_progress' ? 'bg-primary/10 text-primary' :
-                        'bg-muted text-muted-foreground'
-                      }`}>
+                      <Select
+                        value={task.status}
+                        onValueChange={(value) => updateTaskStatus(task.id, value, task.progress_percentage || 0)}
+                      >
+                        <SelectTrigger className="w-[140px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="in_progress">In Progress</SelectItem>
+                          <SelectItem value="completed">Completed</SelectItem>
+                          <SelectItem value="on_hold">On Hold</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                         {task.status}
                       </span>
                     </div>

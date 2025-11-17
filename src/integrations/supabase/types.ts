@@ -65,6 +65,117 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_messages: {
+        Row: {
+          attachment_url: string | null
+          created_at: string | null
+          id: string
+          message: string
+          room_id: string
+          sender_id: string
+          sender_name: string
+          sender_role: string
+        }
+        Insert: {
+          attachment_url?: string | null
+          created_at?: string | null
+          id?: string
+          message: string
+          room_id: string
+          sender_id: string
+          sender_name: string
+          sender_role: string
+        }
+        Update: {
+          attachment_url?: string | null
+          created_at?: string | null
+          id?: string
+          message?: string
+          room_id?: string
+          sender_id?: string
+          sender_name?: string
+          sender_role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "chat_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_participants: {
+        Row: {
+          id: string
+          joined_at: string | null
+          last_read_at: string | null
+          room_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string | null
+          last_read_at?: string | null
+          room_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string | null
+          last_read_at?: string | null
+          room_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_participants_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "chat_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_rooms: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          entity_id: string | null
+          entity_type: string
+          id: string
+          name: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          name?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          name?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_rooms_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       companies: {
         Row: {
           created_at: string
@@ -736,6 +847,7 @@ export type Database = {
           email: string
           id: string
           name: string
+          timezone: string | null
           updated_at: string
           user_id: string
         }
@@ -745,6 +857,7 @@ export type Database = {
           email: string
           id?: string
           name: string
+          timezone?: string | null
           updated_at?: string
           user_id: string
         }
@@ -754,6 +867,7 @@ export type Database = {
           email?: string
           id?: string
           name?: string
+          timezone?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -776,6 +890,7 @@ export type Database = {
           name: string
           role: string | null
           team_role: string | null
+          timezone: string | null
           updated_at: string
           user_id: string
           vendor_id: string | null
@@ -788,6 +903,7 @@ export type Database = {
           name: string
           role?: string | null
           team_role?: string | null
+          timezone?: string | null
           updated_at?: string
           user_id: string
           vendor_id?: string | null
@@ -800,6 +916,7 @@ export type Database = {
           name?: string
           role?: string | null
           team_role?: string | null
+          timezone?: string | null
           updated_at?: string
           user_id?: string
           vendor_id?: string | null
