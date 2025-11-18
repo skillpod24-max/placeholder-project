@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { Plus, ArrowLeft, Eye, MessageSquare } from "lucide-react";
+import { JobChat } from "@/components/JobChat";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { StatusBadge } from "@/components/StatusBadge";
 import { DetailDialog } from "@/components/DetailDialog";
@@ -436,6 +437,21 @@ const VendorJobTasks = () => {
             userId={user?.id || ""}
           />
         </>
+      )}
+
+      {/* Job Chat Section */}
+      {job && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MessageSquare className="h-5 w-5" />
+              Job Discussion
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <JobChat jobId={job.id} jobTitle={job.title} />
+          </CardContent>
+        </Card>
       )}
     </div>
   );

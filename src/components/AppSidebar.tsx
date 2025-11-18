@@ -49,7 +49,9 @@ export function AppSidebar({ role }: AppSidebarProps) {
     { title: "My Workers", url: "/dashboard/vendor/workers", icon: Users },
     { title: "Jobs", url: "/dashboard/vendor/jobs", icon: Briefcase },
     { title: "Teams", url: "/dashboard/vendor/teams", icon: Users },
+    { title: "Billing", url: "/dashboard/vendor/billing", icon: CreditCard },
     { title: "Status Updates", url: "/dashboard/status-updates", icon: Bell },
+    { title: "Settings", url: "/dashboard/settings", icon: Settings },
   ];
 
   const workerItems = [
@@ -58,6 +60,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
     { title: "My Tasks", url: "/dashboard/worker/tasks", icon: Briefcase },
     { title: "Team Head", url: "/dashboard/worker/team-head", icon: UserCog },
     { title: "Status Updates", url: "/dashboard/status-updates", icon: Bell },
+    { title: "Settings", url: "/dashboard/settings", icon: Settings },
   ];
 
   const items = role === "company" ? companyItems : role === "vendor" ? vendorItems : workerItems;

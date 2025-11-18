@@ -4,10 +4,15 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { useAuth } from "@/hooks/useAuth";
 import { Loader2 } from "lucide-react";
+import { Toaster } from "@/components/ui/toaster";
+import { useDeadlineNotifications } from "@/hooks/useDeadlineNotifications";
 
 const DashboardLayout = () => {
   const { user, userRole, loading } = useAuth();
   const navigate = useNavigate();
+  
+  // Enable deadline notifications
+  useDeadlineNotifications();
 
   useEffect(() => {
     if (!loading) {
@@ -37,6 +42,7 @@ const DashboardLayout = () => {
 
   return (
     <SidebarProvider>
+      <Toaster />
       <div className="min-h-screen flex w-full">
         <AppSidebar role={userRole.role} />
         <main className="flex-1 overflow-auto">

@@ -20,6 +20,7 @@ import VendorWorkers from "./pages/dashboard/vendor/Workers";
 import VendorJobs from "./pages/dashboard/vendor/Jobs";
 import VendorJobTasks from "./pages/dashboard/vendor/JobTasks";
 import VendorTeams from "./pages/dashboard/vendor/Teams";
+import VendorBilling from "./pages/dashboard/vendor/Billing";
 import WorkerJobs from "./pages/dashboard/worker/Jobs";
 import WorkerJobTasks from "./pages/dashboard/worker/JobTasks";
 import TeamHeadDashboard from "./pages/dashboard/vendor/TeamHead";
@@ -53,6 +54,7 @@ const App = () => (
             <Route path="vendor/jobs" element={<VendorJobs />} />
             <Route path="vendor/jobs/:jobId/tasks" element={<VendorJobTasks />} />
             <Route path="vendor/teams" element={<VendorTeams />} />
+            <Route path="vendor/billing" element={<VendorBilling />} />
             <Route path="worker" element={<WorkerDashboard />} />
             <Route path="worker/jobs" element={<WorkerJobs />} />
             <Route path="worker/tasks" element={<WorkerJobTasks />} />
