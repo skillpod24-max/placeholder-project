@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface JobTask {
   id: string;
@@ -14,6 +15,7 @@ interface JobTask {
   job_id: string;
   vendor_id: string;
   created_at: string;
+  progress_percentage?: number;
 }
 
 const WorkerJobTasks = () => {
@@ -172,9 +174,6 @@ const WorkerJobTasks = () => {
                           <SelectItem value="on_hold">On Hold</SelectItem>
                         </SelectContent>
                       </Select>
-                    </div>
-                        {task.status}
-                      </span>
                     </div>
                     {(task as any).progress_percentage !== undefined && (
                       <div className="flex items-center gap-2">

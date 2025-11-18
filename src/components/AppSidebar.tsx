@@ -43,9 +43,6 @@ export function AppSidebar({ role }: AppSidebarProps) {
     { title: "Status Updates", url: "/dashboard/status-updates", icon: Activity },
     { title: "Settings", url: "/dashboard/settings", icon: Settings },
   ];
-    { title: "Billing", url: "/dashboard/company/billing", icon: FileText },
-    { title: "Status Updates", url: "/dashboard/status-updates", icon: Bell },
-  ];
 
   const vendorItems = [
     { title: "Dashboard", url: "/dashboard/vendor", icon: Building2 },
