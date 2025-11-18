@@ -146,6 +146,7 @@ export type Database = {
           entity_type: string
           id: string
           name: string | null
+          room_type: string | null
           updated_at: string | null
         }
         Insert: {
@@ -155,6 +156,7 @@ export type Database = {
           entity_type: string
           id?: string
           name?: string | null
+          room_type?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -164,6 +166,7 @@ export type Database = {
           entity_type?: string
           id?: string
           name?: string | null
+          room_type?: string | null
           updated_at?: string | null
         }
         Relationships: [
@@ -343,6 +346,7 @@ export type Database = {
           id: string
           job_id: string
           progress_percentage: number | null
+          qc_status: string | null
           status: string
           title: string
           updated_at: string
@@ -361,6 +365,7 @@ export type Database = {
           id?: string
           job_id: string
           progress_percentage?: number | null
+          qc_status?: string | null
           status?: string
           title: string
           updated_at?: string
@@ -379,6 +384,7 @@ export type Database = {
           id?: string
           job_id?: string
           progress_percentage?: number | null
+          qc_status?: string | null
           status?: string
           title?: string
           updated_at?: string
@@ -497,6 +503,72 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quality_control: {
+        Row: {
+          checklist: Json | null
+          created_at: string
+          defects: Json | null
+          failed_at: string | null
+          id: string
+          inspector_id: string
+          inspector_name: string
+          job_id: string
+          job_task_id: string | null
+          passed_at: string | null
+          rework_notes: string | null
+          rework_required: boolean | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          checklist?: Json | null
+          created_at?: string
+          defects?: Json | null
+          failed_at?: string | null
+          id?: string
+          inspector_id: string
+          inspector_name: string
+          job_id: string
+          job_task_id?: string | null
+          passed_at?: string | null
+          rework_notes?: string | null
+          rework_required?: boolean | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          checklist?: Json | null
+          created_at?: string
+          defects?: Json | null
+          failed_at?: string | null
+          id?: string
+          inspector_id?: string
+          inspector_name?: string
+          job_id?: string
+          job_task_id?: string | null
+          passed_at?: string | null
+          rework_notes?: string | null
+          rework_required?: boolean | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quality_control_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quality_control_job_task_id_fkey"
+            columns: ["job_task_id"]
+            isOneToOne: false
+            referencedRelation: "job_tasks"
             referencedColumns: ["id"]
           },
         ]
