@@ -159,8 +159,8 @@ export const ChatRoom = ({ roomId, entityType, entityId, title }: ChatRoomProps)
   };
 
   return (
-    <Card className="h-[600px] flex flex-col">
-      <CardHeader>
+    <Card className="h-full flex flex-col border-0 rounded-none">
+      <CardHeader className="border-b">
         <CardTitle className="flex items-center gap-2">
           <MessageSquare className="h-5 w-5" />
           {title}

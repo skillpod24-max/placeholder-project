@@ -23,6 +23,8 @@ import {
 import { StatusBadge } from "@/components/StatusBadge";
 import { formatDistanceToNow } from "date-fns";
 import { JobChat } from "@/components/JobChat";
+import { QualityControlDialog } from "@/components/QualityControlDialog";
+import { QualityControlList } from "@/components/QualityControlList";
 
 interface Job {
   id: string;
@@ -526,6 +528,17 @@ const CompanyJobDetail = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Quality Control Section */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Quality Control</CardTitle>
+            {job && <QualityControlDialog jobId={job.id} onSuccess={fetchActivityLogs} />}
+          </CardHeader>
+          <CardContent>
+            {job && <QualityControlList jobId={job.id} />}
+          </CardContent>
+        </Card>
 
         {/* Job Chat Section */}
         <Card>
