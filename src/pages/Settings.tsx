@@ -25,6 +25,7 @@ const Settings = () => {
   const [loading, setLoading] = useState(false);
   const [profileInfo, setProfileInfo] = useState<ProfileInfo | null>(null);
   const [timezone, setTimezone] = useState("UTC");
+  const [industryType, setIndustryType] = useState<string>("general");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -36,12 +37,16 @@ const Settings = () => {
   const fetchProfileInfo = async () => {
     if (!user || !userRole) return;
 
-    // Get company name
+    // Get company name and industry type
     const { data: companyData } = await supabase
       .from("companies")
-      .select("name")
+      .select("name, industry_type")
       .eq("id", userRole.company_id)
       .single();
+    
+    if (companyData?.industry_type) {
+      setIndustryType(companyData.industry_type);
+    }
 
     let name = user.email || "";
     let vendorName = "";
@@ -177,6 +182,33 @@ const Settings = () => {
     });
   };
 
+  const handleIndustryUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userRole?.company_id) return;
+
+    setLoading(true);
+    const { error } = await supabase
+      .from("companies")
+      .update({ industry_type: industryType })
+      .eq("id", userRole.company_id);
+
+    setLoading(false);
+
+    if (error) {
+      toast({
+        title: "Error updating industry type",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Success",
+      description: "Industry type updated successfully",
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -306,6 +338,46 @@ const Settings = () => {
           </form>
         </CardContent>
       </Card>
+
+      {/* Industry Type Settings - Only for Company Admin */}
+      {userRole?.role === "company" && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Industry Type</CardTitle>
+            <CardDescription>Customize your workspace based on your industry</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleIndustryUpdate} className="space-y-4 max-w-md">
+              <div className="space-y-2">
+                <Label htmlFor="industry">Industry</Label>
+                <select
+                  id="industry"
+                  value={industryType}
+                  onChange={(e) => setIndustryType(e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <option value="general">General</option>
+                  <option value="manufacturing">Manufacturing</option>
+                  <option value="it">Information Technology</option>
+                </select>
+                <p className="text-sm text-muted-foreground">
+                  Select your industry to unlock specialized features and workflows
+                </p>
+              </div>
+              <Button type="submit" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  "Update Industry"
+                )}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      )}
 
       {(userRole?.role === "vendor" || userRole?.role === "worker") && (
         <Card>

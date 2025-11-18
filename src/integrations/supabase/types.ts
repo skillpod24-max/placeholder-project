@@ -182,6 +182,7 @@ export type Database = {
           email: string | null
           id: string
           industry: string | null
+          industry_type: string | null
           name: string
           updated_at: string
         }
@@ -190,6 +191,7 @@ export type Database = {
           email?: string | null
           id?: string
           industry?: string | null
+          industry_type?: string | null
           name: string
           updated_at?: string
         }
@@ -198,6 +200,7 @@ export type Database = {
           email?: string | null
           id?: string
           industry?: string | null
+          industry_type?: string | null
           name?: string
           updated_at?: string
         }

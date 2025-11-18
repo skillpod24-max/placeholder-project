@@ -18,9 +18,11 @@ import {
   CheckCircle2,
   Building2,
   Users,
+  MessageSquare,
 } from "lucide-react";
 import { StatusBadge } from "@/components/StatusBadge";
 import { formatDistanceToNow } from "date-fns";
+import { JobChat } from "@/components/JobChat";
 
 interface Job {
   id: string;
@@ -524,6 +526,19 @@ const CompanyJobDetail = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Job Chat Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MessageSquare className="h-5 w-5" />
+              Job Discussion
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {job && <JobChat jobId={job.id} jobTitle={job.title} />}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
