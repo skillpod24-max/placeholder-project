@@ -61,7 +61,6 @@ export const ChatRoomSelector = ({ jobId, onRoomSelect, currentRoomId }: ChatRoo
   };
 
   const fetchJobUsers = async () => {
-    // Fetch all users related to this job (company, vendor, workers)
     const { data: job } = await supabase
       .from("jobs")
       .select("*, assigned_to_vendor_id")
@@ -136,63 +135,85 @@ export const ChatRoomSelector = ({ jobId, onRoomSelect, currentRoomId }: ChatRoo
       case "private":
         if (!targetUserId) return;
         const targetUser = users.find(u => u.user_id === targetUserId);
-        roomName = `Chat with ${targetUser?.name}`;
-        // For private rooms, include both user IDs in the name for uniqueness
-        existingRoomFilter.name = roomName;
+        if (!targetUser) return;
+        roomName = `Chat with ${targetUser.name}`;
         break;
     }
 
-    // Check if room exists
-    const { data: existingRoom } = await supabase
+    // Check if room already exists
+    const { data: existingRooms } = await supabase
       .from("chat_rooms")
       .select("*")
-      .match(existingRoomFilter)
+      .match(existingRoomFilter);
+
+    let roomId: string;
+
+    if (existingRooms && existingRooms.length > 0) {
+      roomId = existingRooms[0].id;
+    } else {
+      // Create new room
+      const { data: newRoom, error } = await supabase
+        .from("chat_rooms")
+        .insert({
+          entity_type: "job",
+          entity_id: jobId,
+          room_type: roomType,
+          name: roomName,
+          company_id: userRole.company_id,
+        })
+        .select()
+        .single();
+
+      if (error || !newRoom) {
+        console.error("Error creating room:", error);
+        return;
+      }
+
+      roomId = newRoom.id;
+    }
+
+    // Join room as participant
+    const { data: existingParticipant } = await supabase
+      .from("chat_participants")
+      .select("*")
+      .eq("room_id", roomId)
+      .eq("user_id", user.id)
       .single();
 
-    if (existingRoom) {
-      // Join existing room
-      await supabase.from("chat_participants").upsert({
-        room_id: existingRoom.id,
+    if (!existingParticipant) {
+      await supabase.from("chat_participants").insert({
+        room_id: roomId,
         user_id: user.id,
       });
-      onRoomSelect(existingRoom.id, roomType, roomName);
-      return;
     }
 
-    // Create new room
-    const { data: newRoom, error } = await supabase
-      .from("chat_rooms")
-      .insert({
-        entity_type: "job",
-        entity_id: jobId,
-        room_type: roomType,
-        name: roomName,
-        company_id: userRole.company_id,
-      })
-      .select()
-      .single();
-
-    if (error || !newRoom) return;
-
-    // Add participants
-    const participants = [{ room_id: newRoom.id, user_id: user.id }];
-    
+    // If private room, add target user
     if (roomType === "private" && targetUserId) {
-      participants.push({ room_id: newRoom.id, user_id: targetUserId });
+      const { data: targetParticipant } = await supabase
+        .from("chat_participants")
+        .select("*")
+        .eq("room_id", roomId)
+        .eq("user_id", targetUserId)
+        .single();
+
+      if (!targetParticipant) {
+        await supabase.from("chat_participants").insert({
+          room_id: roomId,
+          user_id: targetUserId,
+        });
+      }
     }
 
-    await supabase.from("chat_participants").insert(participants);
-    
-    onRoomSelect(newRoom.id, roomType, roomName);
     fetchRooms();
+    onRoomSelect(roomId, roomType, roomName);
   };
 
   const getRoomIcon = (roomType: string) => {
     switch (roomType) {
       case "public":
-        return <Users className="h-4 w-4" />;
-      case "vendor_workers":
         return <Building2 className="h-4 w-4" />;
+      case "vendor_workers":
+        return <Users className="h-4 w-4" />;
       case "private":
         return <User className="h-4 w-4" />;
       default:
@@ -201,88 +222,94 @@ export const ChatRoomSelector = ({ jobId, onRoomSelect, currentRoomId }: ChatRoo
   };
 
   return (
-    <div className="w-64 border-l bg-muted/30 p-4 space-y-4">
-      <div>
-        <h3 className="font-semibold mb-3">Chat Rooms</h3>
-        
-        <div className="space-y-2 mb-4">
-          <Button
-            variant={currentRoomId && rooms.find(r => r.id === currentRoomId)?.room_type === "public" ? "default" : "outline"}
-            size="sm"
-            className="w-full justify-start"
-            onClick={() => createOrJoinRoom("public")}
-          >
-            <Users className="h-4 w-4 mr-2" />
-            Public Discussion
-          </Button>
-
-          {userRole?.role === "vendor" && (
+    <div className="h-full flex flex-col bg-background">
+      <div className="p-4 border-b">
+        <h3 className="font-semibold flex items-center gap-2">
+          <MessageSquare className="h-4 w-4" />
+          Chat Rooms
+        </h3>
+      </div>
+      <ScrollArea className="flex-1 p-4">
+        <div className="space-y-6">
+          <div>
+            <Label className="text-sm font-semibold mb-2 block">Public Chat</Label>
             <Button
-              variant={currentRoomId && rooms.find(r => r.id === currentRoomId)?.room_type === "vendor_workers" ? "default" : "outline"}
               size="sm"
+              variant={currentRoomId && rooms.find(r => r.id === currentRoomId)?.room_type === "public" ? "default" : "outline"}
+              className="w-full justify-start"
+              onClick={() => createOrJoinRoom("public")}
+            >
+              <Building2 className="h-4 w-4 mr-2" />
+              Public Discussion
+            </Button>
+          </div>
+
+          <div>
+            <Label className="text-sm font-semibold mb-2 block">Team Chat</Label>
+            <Button
+              size="sm"
+              variant={currentRoomId && rooms.find(r => r.id === currentRoomId)?.room_type === "vendor_workers" ? "default" : "outline"}
               className="w-full justify-start"
               onClick={() => createOrJoinRoom("vendor_workers")}
             >
-              <Building2 className="h-4 w-4 mr-2" />
+              <Users className="h-4 w-4 mr-2" />
               Vendor Team
             </Button>
+          </div>
+
+          {users.length > 0 && (
+            <div>
+              <Label className="text-sm font-semibold mb-2 block">Direct Message</Label>
+              <Select value={selectedUserId} onValueChange={setSelectedUserId}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select user..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {users.map((u) => (
+                    <SelectItem key={u.user_id} value={u.user_id}>
+                      <div className="flex items-center gap-2">
+                        <span>{u.name}</span>
+                        <Badge variant="outline" className="text-xs">
+                          {u.role}
+                        </Badge>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                size="sm"
+                className="w-full mt-2"
+                disabled={!selectedUserId}
+                onClick={() => selectedUserId && createOrJoinRoom("private", selectedUserId)}
+              >
+                <User className="h-4 w-4 mr-2" />
+                Start Chat
+              </Button>
+            </div>
+          )}
+
+          {rooms.length > 0 && (
+            <div>
+              <h4 className="text-sm font-semibold mb-2">Recent Rooms</h4>
+              <div className="space-y-1">
+                {rooms.map((room) => (
+                  <Button
+                    key={room.id}
+                    variant={currentRoomId === room.id ? "default" : "ghost"}
+                    size="sm"
+                    className="w-full justify-start text-xs"
+                    onClick={() => onRoomSelect(room.id, room.room_type, room.name || "Chat")}
+                  >
+                    {getRoomIcon(room.room_type)}
+                    <span className="ml-2 truncate">{room.name}</span>
+                  </Button>
+                ))}
+              </div>
+            </div>
           )}
         </div>
-      </div>
-
-      {users.length > 0 && (
-        <div>
-          <Label className="text-sm font-semibold mb-2 block">Direct Message</Label>
-          <Select value={selectedUserId} onValueChange={setSelectedUserId}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select user..." />
-            </SelectTrigger>
-            <SelectContent>
-              {users.map((u) => (
-                <SelectItem key={u.user_id} value={u.user_id}>
-                  <div className="flex items-center gap-2">
-                    <span>{u.name}</span>
-                    <Badge variant="outline" className="text-xs">
-                      {u.role}
-                    </Badge>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button
-            size="sm"
-            className="w-full mt-2"
-            disabled={!selectedUserId}
-            onClick={() => selectedUserId && createOrJoinRoom("private", selectedUserId)}
-          >
-            <User className="h-4 w-4 mr-2" />
-            Start Chat
-          </Button>
-        </div>
-      )}
-
-      {rooms.length > 0 && (
-        <div>
-          <h4 className="text-sm font-semibold mb-2">Recent Rooms</h4>
-          <ScrollArea className="h-48">
-            <div className="space-y-1">
-              {rooms.map((room) => (
-                <Button
-                  key={room.id}
-                  variant={currentRoomId === room.id ? "default" : "ghost"}
-                  size="sm"
-                  className="w-full justify-start text-xs"
-                  onClick={() => onRoomSelect(room.id, room.room_type, room.name || "Chat")}
-                >
-                  {getRoomIcon(room.room_type)}
-                  <span className="ml-2 truncate">{room.name}</span>
-                </Button>
-              ))}
-            </div>
-          </ScrollArea>
-        </div>
-      )}
+      </ScrollArea>
     </div>
   );
 };

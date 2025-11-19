@@ -549,7 +549,7 @@ const CompanyJobDetail = () => {
               Job Discussion
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             {job && <JobChat jobId={job.id} jobTitle={job.title} />}
           </CardContent>
         </Card>

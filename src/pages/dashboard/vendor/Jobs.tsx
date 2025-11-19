@@ -11,11 +11,13 @@ import { useNavigate } from "react-router-dom";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { StatusBadge } from "@/components/StatusBadge";
 
+type JobStatus = "draft" | "created" | "pending" | "assigned" | "in_progress" | "completed" | "on_hold" | "cancelled";
+
 interface Job {
   id: string;
   title: string;
   description: string;
-  status: "draft" | "created" | "pending" | "assigned" | "in_progress" | "completed" | "on_hold" | "cancelled";
+  status: JobStatus;
   assigned_to_worker_id: string | null;
   created_at: string;
 }
@@ -98,6 +100,38 @@ const VendorJobs = () => {
     }
   };
 
+  const handleStatusUpdate = async (jobId: string, newStatus: JobStatus, oldStatus: JobStatus) => {
+    const { error } = await supabase
+      .from("jobs")
+      .update({ status: newStatus })
+      .eq("id", jobId);
+
+    if (error) {
+      toast({
+        title: "Error updating job status",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Create activity log
+    await supabase.from("job_activities").insert([{
+      job_id: jobId,
+      user_id: user?.id || "",
+      activity_type: "status_change",
+      description: `Status changed from ${oldStatus} to ${newStatus}`,
+      old_status: oldStatus,
+      new_status: newStatus,
+    }]);
+
+    toast({
+      title: "Status updated successfully",
+    });
+
+    fetchVendorJobsAndWorkers();
+  };
+
   const handleAssignToWorker = async () => {
     if (!selectedJob || !selectedWorker) return;
 
@@ -112,24 +146,25 @@ const VendorJobs = () => {
         description: error.message,
         variant: "destructive",
       });
-    } else {
-      // Create activity log
-      await supabase.from("job_activities").insert({
-        job_id: selectedJob,
-        user_id: user?.id,
-        activity_type: "assignment",
-        description: "Job assigned to worker",
-        new_status: "assigned",
-      });
-
-      toast({
-        title: "Job assigned successfully",
-      });
-      setDialogOpen(false);
-      setSelectedJob(null);
-      setSelectedWorker("");
-      fetchVendorJobsAndWorkers();
+      return;
     }
+
+    // Create activity log
+    await supabase.from("job_activities").insert([{
+      job_id: selectedJob,
+      user_id: user?.id || "",
+      activity_type: "assignment",
+      description: "Job assigned to worker",
+      new_status: "assigned",
+    }]);
+
+    toast({
+      title: "Job assigned successfully",
+    });
+    setDialogOpen(false);
+    setSelectedJob(null);
+    setSelectedWorker("");
+    fetchVendorJobsAndWorkers();
   };
 
   const openAssignDialog = (jobId: string) => {
@@ -198,7 +233,20 @@ const VendorJobs = () => {
                     <TableCell className="font-medium">{job.title}</TableCell>
                     <TableCell className="max-w-xs truncate">{job.description}</TableCell>
                     <TableCell>
-                      <StatusBadge status={job.status} />
+                      <Select
+                        value={job.status}
+                        onValueChange={(value) => handleStatusUpdate(job.id, value as JobStatus, job.status)}
+                      >
+                        <SelectTrigger className="w-[160px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="assigned">Assigned</SelectItem>
+                          <SelectItem value="in_progress">In Progress</SelectItem>
+                          <SelectItem value="completed">Completed</SelectItem>
+                          <SelectItem value="on_hold">On Hold</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </TableCell>
                     <TableCell>
                       {new Date(job.created_at).toLocaleDateString()} at{" "}
