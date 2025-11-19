@@ -16,6 +16,8 @@ import CompanyJobs from "./pages/dashboard/company/Jobs";
 import CompanyJobDetail from "./pages/dashboard/company/JobDetail";
 import CompanyTeams from "./pages/dashboard/company/Teams";
 import Billing from "./pages/dashboard/company/Billing";
+import InvoiceApprovals from "./pages/dashboard/company/InvoiceApprovals";
+import Sprints from "./pages/dashboard/company/Sprints";
 import VendorWorkers from "./pages/dashboard/vendor/Workers";
 import VendorJobs from "./pages/dashboard/vendor/Jobs";
 import VendorJobTasks from "./pages/dashboard/vendor/JobTasks";
@@ -49,6 +51,8 @@ const App = () => (
             <Route path="company/teams" element={<CompanyTeams />} />
             <Route path="company/resources" element={<CompanyResources />} />
             <Route path="company/billing" element={<Billing />} />
+            <Route path="company/invoice-approvals" element={<InvoiceApprovals />} />
+            <Route path="company/sprints" element={<Sprints />} />
             <Route path="vendor" element={<VendorDashboard />} />
             <Route path="vendor/workers" element={<VendorWorkers />} />
             <Route path="vendor/jobs" element={<VendorJobs />} />

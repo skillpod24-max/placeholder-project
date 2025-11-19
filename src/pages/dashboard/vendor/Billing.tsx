@@ -114,7 +114,7 @@ export default function VendorBilling() {
       const tax = parseFloat(newInvoice.tax || "0");
       const total = amount + tax;
 
-      const { error } = await supabase.from("invoices").insert({
+      const { data: invoiceData, error } = await supabase.from("invoices").insert({
         invoice_number: generateInvoiceNumber(),
         company_id: userRole.company_id,
         vendor_id: vendorId,
@@ -126,9 +126,36 @@ export default function VendorBilling() {
         notes: newInvoice.notes,
         created_by: user.id,
         items: [],
-      });
+      }).select().single();
 
       if (error) throw error;
+
+      // Create invoice approval record
+      if (invoiceData) {
+        await supabase.from("invoice_approvals").insert({
+          invoice_id: invoiceData.id,
+          company_id: userRole.company_id,
+          status: "pending",
+        });
+
+        // Log job history if linked to a job
+        if (newInvoice.job_id) {
+          const { data: vendorData } = await supabase
+            .from("vendors")
+            .select("name")
+            .eq("id", vendorId)
+            .single();
+
+          await supabase.from("job_order_history").insert({
+            job_id: newInvoice.job_id,
+            user_id: user.id,
+            user_name: vendorData?.name || "Vendor",
+            user_role: "vendor",
+            action: "Invoice Raised",
+            notes: `Invoice ${invoiceData.invoice_number} raised for ₹${total.toFixed(2)}`,
+          });
+        }
+      }
 
       // Create notification for company
       await supabase.from("activity_logs").insert({
