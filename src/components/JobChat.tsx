@@ -26,22 +26,24 @@ export const JobChat = ({ jobId, jobTitle }: JobChatProps) => {
 
   if (!roomId) {
     return (
-      <div className="flex h-[600px] border rounded-lg">
-        <div className="flex-1 flex items-center justify-center text-muted-foreground">
+      <div className="flex h-[600px] border rounded-lg overflow-hidden">
+        <div className="flex-1 flex items-center justify-center text-muted-foreground bg-muted/20">
           Select a chat room from the sidebar to start messaging
         </div>
-        <ChatRoomSelector
-          jobId={jobId}
-          onRoomSelect={handleRoomSelect}
-          currentRoomId={roomId || undefined}
-        />
+        <div className="w-80 border-l bg-background">
+          <ChatRoomSelector
+            jobId={jobId}
+            onRoomSelect={handleRoomSelect}
+            currentRoomId={roomId || undefined}
+          />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-[600px] border rounded-lg">
-      <div className="flex-1">
+    <div className="flex h-[600px] border rounded-lg overflow-hidden">
+      <div className="flex-1 min-w-0">
         <ChatRoom
           roomId={roomId}
           entityType="job"
@@ -49,11 +51,13 @@ export const JobChat = ({ jobId, jobTitle }: JobChatProps) => {
           title={roomName || `Job Chat: ${jobTitle}`}
         />
       </div>
-      <ChatRoomSelector
-        jobId={jobId}
-        onRoomSelect={handleRoomSelect}
-        currentRoomId={roomId}
-      />
+      <div className="w-80 border-l bg-background flex-shrink-0">
+        <ChatRoomSelector
+          jobId={jobId}
+          onRoomSelect={handleRoomSelect}
+          currentRoomId={roomId}
+        />
+      </div>
     </div>
   );
 };

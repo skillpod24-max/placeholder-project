@@ -120,10 +120,21 @@ export const QualityControlDialog = ({ jobId, jobTaskId, onSuccess }: QualityCon
     }
 
     toast({
-      title: "QC inspection completed",
-      description: `Status: ${finalStatus.toUpperCase()}`,
+      title: "QC inspection recorded",
+      description: `Job ${finalStatus === "passed" ? "passed" : "failed"} quality control`,
     });
 
+    // Reset form
+    setChecklist([
+      { id: "1", item: "Dimensions accuracy", passed: false },
+      { id: "2", item: "Surface finish quality", passed: false },
+      { id: "3", item: "Material specification", passed: false },
+    ]);
+    setDefects([]);
+    setStatus("pending");
+    setReworkNotes("");
+    setInspectorName("");
+    
     setOpen(false);
     onSuccess?.();
   };
