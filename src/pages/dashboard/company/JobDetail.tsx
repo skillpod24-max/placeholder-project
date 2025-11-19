@@ -25,6 +25,7 @@ import { formatDistanceToNow } from "date-fns";
 import { JobChat } from "@/components/JobChat";
 import { QualityControlDialog } from "@/components/QualityControlDialog";
 import { QualityControlList } from "@/components/QualityControlList";
+import { JobOrderHistory } from "@/components/JobOrderHistory";
 
 interface Job {
   id: string;
@@ -552,6 +553,9 @@ const CompanyJobDetail = () => {
             {job && <JobChat jobId={job.id} jobTitle={job.title} />}
           </CardContent>
         </Card>
+
+        {/* Job Order History Section */}
+        {job && <JobOrderHistory jobId={job.id} />}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Building2, Users, Briefcase, Settings, LogOut, FileText, Bell, UserCog, Home, Activity, CreditCard, Package } from "lucide-react";
+import { Building2, Users, Briefcase, Settings, LogOut, FileText, Bell, UserCog, Home, Activity, CreditCard, Package, CheckCircle, Target } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Sidebar,
@@ -40,6 +40,8 @@ export function AppSidebar({ role }: AppSidebarProps) {
     { title: "Teams", url: "/dashboard/company/teams", icon: Users },
     { title: "Resources", url: "/dashboard/company/resources", icon: Package },
     { title: "Billing", url: "/dashboard/company/billing", icon: CreditCard },
+    { title: "Invoice Approvals", url: "/dashboard/company/invoice-approvals", icon: CheckCircle },
+    { title: "Sprints", url: "/dashboard/company/sprints", icon: Target },
     { title: "Status Updates", url: "/dashboard/status-updates", icon: Activity },
     { title: "Settings", url: "/dashboard/settings", icon: Settings },
   ];
