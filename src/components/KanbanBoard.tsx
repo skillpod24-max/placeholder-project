@@ -40,7 +40,15 @@ export const KanbanBoard = ({ sprintId }: KanbanBoardProps) => {
   }, [sprintId]);
 
   const fetchTasks = async () => {
-    if (!userRole?.company_id) return;
+    if (!userRole?.company_id) {
+      setLoading(false);
+      toast({
+        title: "Error",
+        description: "Unable to load company information",
+        variant: "destructive",
+      });
+      return;
+    }
 
     setLoading(true);
     const { data, error } = await supabase
@@ -53,11 +61,13 @@ export const KanbanBoard = ({ sprintId }: KanbanBoardProps) => {
       .order("created_at", { ascending: false });
 
     if (error) {
+      console.error("Error loading tasks:", error);
       toast({
         title: "Error loading tasks",
         description: error.message,
         variant: "destructive",
       });
+      setTasks([]);
     } else {
       setTasks(data || []);
     }

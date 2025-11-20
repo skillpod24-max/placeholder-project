@@ -1,4 +1,4 @@
-import { Building2, Users, Briefcase, Settings, LogOut, FileText, Bell, UserCog, Home, Activity, CreditCard, Package, CheckCircle, Target } from "lucide-react";
+import { Building2, Users, Briefcase, Settings, LogOut, FileText, Bell, UserCog, Home, Activity, CreditCard, Package, CheckCircle, Target, BarChart, Clock } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Sidebar,
@@ -42,6 +42,9 @@ export function AppSidebar({ role }: AppSidebarProps) {
     { title: "Billing", url: "/dashboard/company/billing", icon: CreditCard },
     { title: "Invoice Approvals", url: "/dashboard/company/invoice-approvals", icon: CheckCircle },
     { title: "Sprints", url: "/dashboard/company/sprints", icon: Target },
+    { title: "Reports", url: "/dashboard/company/reports", icon: BarChart },
+    { title: "BOM", url: "/dashboard/company/bom", icon: FileText },
+    { title: "Time Tracking", url: "/dashboard/company/time-tracking", icon: Clock },
     { title: "Status Updates", url: "/dashboard/status-updates", icon: Activity },
     { title: "Settings", url: "/dashboard/settings", icon: Settings },
   ];
@@ -52,6 +55,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
     { title: "Jobs", url: "/dashboard/vendor/jobs", icon: Briefcase },
     { title: "Teams", url: "/dashboard/vendor/teams", icon: Users },
     { title: "Billing", url: "/dashboard/vendor/billing", icon: CreditCard },
+    { title: "Time Tracking", url: "/dashboard/vendor/time-tracking", icon: Clock },
     { title: "Status Updates", url: "/dashboard/status-updates", icon: Bell },
     { title: "Settings", url: "/dashboard/settings", icon: Settings },
   ];
@@ -60,6 +64,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
     { title: "Dashboard", url: "/dashboard/worker", icon: Building2 },
     { title: "My Jobs", url: "/dashboard/worker/jobs", icon: Briefcase },
     { title: "My Tasks", url: "/dashboard/worker/tasks", icon: Briefcase },
+    { title: "Time Tracking", url: "/dashboard/worker/time-tracking", icon: Clock },
     { title: "Team Head", url: "/dashboard/worker/team-head", icon: UserCog },
     { title: "Status Updates", url: "/dashboard/status-updates", icon: Bell },
     { title: "Settings", url: "/dashboard/settings", icon: Settings },

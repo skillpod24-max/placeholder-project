@@ -116,7 +116,10 @@ export const ChatRoomSelector = ({ jobId, onRoomSelect, currentRoomId }: ChatRoo
   };
 
   const createOrJoinRoom = async (roomType: string, targetUserId?: string) => {
-    if (!user || !userRole) return;
+    if (!user || !userRole) {
+      console.error("User or userRole not available");
+      return;
+    }
 
     let roomName = "";
     let existingRoomFilter: any = {
