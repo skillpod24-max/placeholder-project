@@ -65,6 +65,47 @@ export type Database = {
         }
         Relationships: []
       }
+      bom: {
+        Row: {
+          actual_cost: number
+          created_at: string
+          id: string
+          items: Json
+          job_id: string
+          total_cost: number
+          updated_at: string
+          variance: number
+        }
+        Insert: {
+          actual_cost?: number
+          created_at?: string
+          id?: string
+          items?: Json
+          job_id: string
+          total_cost?: number
+          updated_at?: string
+          variance?: number
+        }
+        Update: {
+          actual_cost?: number
+          created_at?: string
+          id?: string
+          items?: Json
+          job_id?: string
+          total_cost?: number
+          updated_at?: string
+          variance?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bom_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_messages: {
         Row: {
           attachment_url: string | null
@@ -1013,6 +1054,70 @@ export type Database = {
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      time_entries: {
+        Row: {
+          billable: boolean
+          created_at: string
+          description: string | null
+          end_time: string | null
+          hours: number
+          id: string
+          job_id: string
+          job_task_id: string | null
+          start_time: string
+          updated_at: string
+          worker_id: string
+        }
+        Insert: {
+          billable?: boolean
+          created_at?: string
+          description?: string | null
+          end_time?: string | null
+          hours?: number
+          id?: string
+          job_id: string
+          job_task_id?: string | null
+          start_time?: string
+          updated_at?: string
+          worker_id: string
+        }
+        Update: {
+          billable?: boolean
+          created_at?: string
+          description?: string | null
+          end_time?: string | null
+          hours?: number
+          id?: string
+          job_id?: string
+          job_task_id?: string | null
+          start_time?: string
+          updated_at?: string
+          worker_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "time_entries_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entries_job_task_id_fkey"
+            columns: ["job_task_id"]
+            isOneToOne: false
+            referencedRelation: "job_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entries_worker_id_fkey"
+            columns: ["worker_id"]
+            isOneToOne: false
+            referencedRelation: "workers"
             referencedColumns: ["id"]
           },
         ]

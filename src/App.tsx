@@ -18,6 +18,9 @@ import CompanyTeams from "./pages/dashboard/company/Teams";
 import Billing from "./pages/dashboard/company/Billing";
 import InvoiceApprovals from "./pages/dashboard/company/InvoiceApprovals";
 import Sprints from "./pages/dashboard/company/Sprints";
+import Reports from "./pages/dashboard/company/Reports";
+import BOM from "./pages/dashboard/company/BOM";
+import TimeTracking from "./pages/dashboard/TimeTracking";
 import VendorWorkers from "./pages/dashboard/vendor/Workers";
 import VendorJobs from "./pages/dashboard/vendor/Jobs";
 import VendorJobTasks from "./pages/dashboard/vendor/JobTasks";
@@ -53,16 +56,21 @@ const App = () => (
             <Route path="company/billing" element={<Billing />} />
             <Route path="company/invoice-approvals" element={<InvoiceApprovals />} />
             <Route path="company/sprints" element={<Sprints />} />
+            <Route path="company/reports" element={<Reports />} />
+            <Route path="company/bom" element={<BOM />} />
+            <Route path="company/time-tracking" element={<TimeTracking />} />
             <Route path="vendor" element={<VendorDashboard />} />
             <Route path="vendor/workers" element={<VendorWorkers />} />
             <Route path="vendor/jobs" element={<VendorJobs />} />
             <Route path="vendor/jobs/:jobId/tasks" element={<VendorJobTasks />} />
             <Route path="vendor/teams" element={<VendorTeams />} />
             <Route path="vendor/billing" element={<VendorBilling />} />
+            <Route path="vendor/time-tracking" element={<TimeTracking />} />
             <Route path="worker" element={<WorkerDashboard />} />
             <Route path="worker/jobs" element={<WorkerJobs />} />
             <Route path="worker/tasks" element={<WorkerJobTasks />} />
             <Route path="worker/team-head" element={<TeamHeadDashboard />} />
+            <Route path="worker/time-tracking" element={<TimeTracking />} />
             <Route path="status-updates" element={<StatusUpdates />} />
             <Route path="settings" element={<Settings />} />
           </Route>
