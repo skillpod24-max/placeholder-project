@@ -14,1279 +14,835 @@ export type Database = {
   }
   public: {
     Tables: {
-      activity_logs: {
+      admin_users: {
         Row: {
-          action_type: string
-          created_at: string | null
-          deadline_notified: boolean | null
-          entity_id: string
-          entity_type: string
+          created_at: string
+          email: string
           id: string
-          is_read: boolean | null
-          new_value: string | null
-          notes: string | null
-          notification_type: string | null
-          old_value: string | null
-          progress_percentage: number | null
-          recipient_id: string | null
+          name: string
+          role: string
+          updated_at: string
           user_id: string
         }
         Insert: {
-          action_type: string
-          created_at?: string | null
-          deadline_notified?: boolean | null
-          entity_id: string
-          entity_type: string
+          created_at?: string
+          email: string
           id?: string
-          is_read?: boolean | null
-          new_value?: string | null
-          notes?: string | null
-          notification_type?: string | null
-          old_value?: string | null
-          progress_percentage?: number | null
-          recipient_id?: string | null
+          name: string
+          role?: string
+          updated_at?: string
           user_id: string
         }
         Update: {
-          action_type?: string
-          created_at?: string | null
-          deadline_notified?: boolean | null
-          entity_id?: string
-          entity_type?: string
+          created_at?: string
+          email?: string
           id?: string
-          is_read?: boolean | null
-          new_value?: string | null
-          notes?: string | null
-          notification_type?: string | null
-          old_value?: string | null
-          progress_percentage?: number | null
-          recipient_id?: string | null
+          name?: string
+          role?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
       }
-      bom: {
+      banners: {
         Row: {
-          actual_cost: number
+          button_text: string | null
           created_at: string
+          display_order: number | null
+          ends_at: string | null
           id: string
-          items: Json
-          job_id: string
-          total_cost: number
-          updated_at: string
-          variance: number
+          image_url: string
+          is_active: boolean | null
+          link_url: string | null
+          mobile_image_url: string | null
+          starts_at: string | null
+          subtitle: string | null
+          title: string
         }
         Insert: {
-          actual_cost?: number
+          button_text?: string | null
           created_at?: string
+          display_order?: number | null
+          ends_at?: string | null
           id?: string
-          items?: Json
-          job_id: string
-          total_cost?: number
-          updated_at?: string
-          variance?: number
+          image_url: string
+          is_active?: boolean | null
+          link_url?: string | null
+          mobile_image_url?: string | null
+          starts_at?: string | null
+          subtitle?: string | null
+          title: string
         }
         Update: {
-          actual_cost?: number
+          button_text?: string | null
           created_at?: string
+          display_order?: number | null
+          ends_at?: string | null
           id?: string
-          items?: Json
-          job_id?: string
-          total_cost?: number
-          updated_at?: string
-          variance?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bom_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      chat_messages: {
-        Row: {
-          attachment_url: string | null
-          created_at: string | null
-          id: string
-          message: string
-          room_id: string
-          sender_id: string
-          sender_name: string
-          sender_role: string
-        }
-        Insert: {
-          attachment_url?: string | null
-          created_at?: string | null
-          id?: string
-          message: string
-          room_id: string
-          sender_id: string
-          sender_name: string
-          sender_role: string
-        }
-        Update: {
-          attachment_url?: string | null
-          created_at?: string | null
-          id?: string
-          message?: string
-          room_id?: string
-          sender_id?: string
-          sender_name?: string
-          sender_role?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "chat_messages_room_id_fkey"
-            columns: ["room_id"]
-            isOneToOne: false
-            referencedRelation: "chat_rooms"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      chat_participants: {
-        Row: {
-          id: string
-          joined_at: string | null
-          last_read_at: string | null
-          room_id: string
-          user_id: string
-        }
-        Insert: {
-          id?: string
-          joined_at?: string | null
-          last_read_at?: string | null
-          room_id: string
-          user_id: string
-        }
-        Update: {
-          id?: string
-          joined_at?: string | null
-          last_read_at?: string | null
-          room_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "chat_participants_room_id_fkey"
-            columns: ["room_id"]
-            isOneToOne: false
-            referencedRelation: "chat_rooms"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      chat_rooms: {
-        Row: {
-          company_id: string
-          created_at: string | null
-          entity_id: string | null
-          entity_type: string
-          id: string
-          name: string | null
-          room_type: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          company_id: string
-          created_at?: string | null
-          entity_id?: string | null
-          entity_type: string
-          id?: string
-          name?: string | null
-          room_type?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          company_id?: string
-          created_at?: string | null
-          entity_id?: string | null
-          entity_type?: string
-          id?: string
-          name?: string | null
-          room_type?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "chat_rooms_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      companies: {
-        Row: {
-          created_at: string
-          email: string | null
-          id: string
-          industry: string | null
-          industry_type: string | null
-          name: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          email?: string | null
-          id?: string
-          industry?: string | null
-          industry_type?: string | null
-          name: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          email?: string | null
-          id?: string
-          industry?: string | null
-          industry_type?: string | null
-          name?: string
-          updated_at?: string
+          image_url?: string
+          is_active?: boolean | null
+          link_url?: string | null
+          mobile_image_url?: string | null
+          starts_at?: string | null
+          subtitle?: string | null
+          title?: string
         }
         Relationships: []
       }
-      invoice_approvals: {
+      brands: {
         Row: {
-          approved_at: string | null
-          approved_by: string | null
-          company_id: string
-          created_at: string | null
-          id: string
-          invoice_id: string
-          notes: string | null
-          payment_date: string | null
-          payment_reference: string | null
-          rejected_at: string | null
-          rejection_reason: string | null
-          status: string
-          updated_at: string | null
-        }
-        Insert: {
-          approved_at?: string | null
-          approved_by?: string | null
-          company_id: string
-          created_at?: string | null
-          id?: string
-          invoice_id: string
-          notes?: string | null
-          payment_date?: string | null
-          payment_reference?: string | null
-          rejected_at?: string | null
-          rejection_reason?: string | null
-          status?: string
-          updated_at?: string | null
-        }
-        Update: {
-          approved_at?: string | null
-          approved_by?: string | null
-          company_id?: string
-          created_at?: string | null
-          id?: string
-          invoice_id?: string
-          notes?: string | null
-          payment_date?: string | null
-          payment_reference?: string | null
-          rejected_at?: string | null
-          rejection_reason?: string | null
-          status?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "invoice_approvals_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "invoice_approvals_invoice_id_fkey"
-            columns: ["invoice_id"]
-            isOneToOne: false
-            referencedRelation: "invoices"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      invoices: {
-        Row: {
-          amount: number
-          company_id: string
-          created_at: string
-          created_by: string
-          due_date: string | null
-          id: string
-          invoice_number: string
-          issue_date: string
-          items: Json | null
-          job_id: string | null
-          notes: string | null
-          paid_date: string | null
-          status: string
-          tax: number | null
-          total_amount: number
-          updated_at: string
-          vendor_id: string
-        }
-        Insert: {
-          amount: number
-          company_id: string
-          created_at?: string
-          created_by: string
-          due_date?: string | null
-          id?: string
-          invoice_number: string
-          issue_date?: string
-          items?: Json | null
-          job_id?: string | null
-          notes?: string | null
-          paid_date?: string | null
-          status?: string
-          tax?: number | null
-          total_amount: number
-          updated_at?: string
-          vendor_id: string
-        }
-        Update: {
-          amount?: number
-          company_id?: string
-          created_at?: string
-          created_by?: string
-          due_date?: string | null
-          id?: string
-          invoice_number?: string
-          issue_date?: string
-          items?: Json | null
-          job_id?: string | null
-          notes?: string | null
-          paid_date?: string | null
-          status?: string
-          tax?: number | null
-          total_amount?: number
-          updated_at?: string
-          vendor_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "invoices_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "invoices_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "invoices_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      job_activities: {
-        Row: {
-          activity_type: string
-          created_at: string
-          description: string
-          id: string
-          job_id: string
-          new_status: Database["public"]["Enums"]["job_status"] | null
-          old_status: Database["public"]["Enums"]["job_status"] | null
-          user_id: string
-        }
-        Insert: {
-          activity_type: string
-          created_at?: string
-          description: string
-          id?: string
-          job_id: string
-          new_status?: Database["public"]["Enums"]["job_status"] | null
-          old_status?: Database["public"]["Enums"]["job_status"] | null
-          user_id: string
-        }
-        Update: {
-          activity_type?: string
-          created_at?: string
-          description?: string
-          id?: string
-          job_id?: string
-          new_status?: Database["public"]["Enums"]["job_status"] | null
-          old_status?: Database["public"]["Enums"]["job_status"] | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "job_activities_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      job_order_history: {
-        Row: {
-          action: string
-          created_at: string | null
-          field_changed: string | null
-          id: string
-          job_id: string
-          new_value: string | null
-          notes: string | null
-          old_value: string | null
-          user_id: string
-          user_name: string
-          user_role: string
-        }
-        Insert: {
-          action: string
-          created_at?: string | null
-          field_changed?: string | null
-          id?: string
-          job_id: string
-          new_value?: string | null
-          notes?: string | null
-          old_value?: string | null
-          user_id: string
-          user_name: string
-          user_role: string
-        }
-        Update: {
-          action?: string
-          created_at?: string | null
-          field_changed?: string | null
-          id?: string
-          job_id?: string
-          new_value?: string | null
-          notes?: string | null
-          old_value?: string | null
-          user_id?: string
-          user_name?: string
-          user_role?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "job_order_history_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      job_tasks: {
-        Row: {
-          assigned_at: string | null
-          assigned_by: string | null
-          assigned_to_team_id: string | null
-          assigned_to_worker_id: string | null
-          created_at: string
-          custom_fields: Json | null
-          daily_updates: Json | null
-          deadline: string | null
-          description: string | null
-          id: string
-          job_id: string
-          progress_percentage: number | null
-          qc_status: string | null
-          sprint_id: string | null
-          status: string
-          title: string
-          updated_at: string
-          vendor_id: string
-        }
-        Insert: {
-          assigned_at?: string | null
-          assigned_by?: string | null
-          assigned_to_team_id?: string | null
-          assigned_to_worker_id?: string | null
-          created_at?: string
-          custom_fields?: Json | null
-          daily_updates?: Json | null
-          deadline?: string | null
-          description?: string | null
-          id?: string
-          job_id: string
-          progress_percentage?: number | null
-          qc_status?: string | null
-          sprint_id?: string | null
-          status?: string
-          title: string
-          updated_at?: string
-          vendor_id: string
-        }
-        Update: {
-          assigned_at?: string | null
-          assigned_by?: string | null
-          assigned_to_team_id?: string | null
-          assigned_to_worker_id?: string | null
-          created_at?: string
-          custom_fields?: Json | null
-          daily_updates?: Json | null
-          deadline?: string | null
-          description?: string | null
-          id?: string
-          job_id?: string
-          progress_percentage?: number | null
-          qc_status?: string | null
-          sprint_id?: string | null
-          status?: string
-          title?: string
-          updated_at?: string
-          vendor_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "job_tasks_assigned_to_team_id_fkey"
-            columns: ["assigned_to_team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_tasks_assigned_to_worker_id_fkey"
-            columns: ["assigned_to_worker_id"]
-            isOneToOne: false
-            referencedRelation: "workers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_tasks_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_tasks_sprint_id_fkey"
-            columns: ["sprint_id"]
-            isOneToOne: false
-            referencedRelation: "sprints"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_tasks_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      jobs: {
-        Row: {
-          assigned_at: string | null
-          assigned_by: string | null
-          assigned_to_team_id: string | null
-          assigned_to_vendor_id: string | null
-          assigned_to_worker_id: string | null
-          company_id: string
-          created_at: string
-          created_by: string
-          custom_fields: Json | null
-          deadline: string | null
-          description: string | null
-          id: string
-          requirements: string | null
-          status: Database["public"]["Enums"]["job_status"]
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          assigned_at?: string | null
-          assigned_by?: string | null
-          assigned_to_team_id?: string | null
-          assigned_to_vendor_id?: string | null
-          assigned_to_worker_id?: string | null
-          company_id: string
-          created_at?: string
-          created_by: string
-          custom_fields?: Json | null
-          deadline?: string | null
-          description?: string | null
-          id?: string
-          requirements?: string | null
-          status?: Database["public"]["Enums"]["job_status"]
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          assigned_at?: string | null
-          assigned_by?: string | null
-          assigned_to_team_id?: string | null
-          assigned_to_vendor_id?: string | null
-          assigned_to_worker_id?: string | null
-          company_id?: string
-          created_at?: string
-          created_by?: string
-          custom_fields?: Json | null
-          deadline?: string | null
-          description?: string | null
-          id?: string
-          requirements?: string | null
-          status?: Database["public"]["Enums"]["job_status"]
-          title?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "jobs_assigned_to_team_id_fkey"
-            columns: ["assigned_to_team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "jobs_assigned_to_vendor_id_fkey"
-            columns: ["assigned_to_vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "jobs_assigned_to_worker_id_fkey"
-            columns: ["assigned_to_worker_id"]
-            isOneToOne: false
-            referencedRelation: "workers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "jobs_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      quality_control: {
-        Row: {
-          checklist: Json | null
-          created_at: string
-          defects: Json | null
-          failed_at: string | null
-          id: string
-          inspector_id: string
-          inspector_name: string
-          job_id: string
-          job_task_id: string | null
-          passed_at: string | null
-          rework_notes: string | null
-          rework_required: boolean | null
-          status: string
-          updated_at: string
-        }
-        Insert: {
-          checklist?: Json | null
-          created_at?: string
-          defects?: Json | null
-          failed_at?: string | null
-          id?: string
-          inspector_id: string
-          inspector_name: string
-          job_id: string
-          job_task_id?: string | null
-          passed_at?: string | null
-          rework_notes?: string | null
-          rework_required?: boolean | null
-          status?: string
-          updated_at?: string
-        }
-        Update: {
-          checklist?: Json | null
-          created_at?: string
-          defects?: Json | null
-          failed_at?: string | null
-          id?: string
-          inspector_id?: string
-          inspector_name?: string
-          job_id?: string
-          job_task_id?: string | null
-          passed_at?: string | null
-          rework_notes?: string | null
-          rework_required?: boolean | null
-          status?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "quality_control_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "quality_control_job_task_id_fkey"
-            columns: ["job_task_id"]
-            isOneToOne: false
-            referencedRelation: "job_tasks"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      resource_allocations: {
-        Row: {
-          allocated_at: string | null
-          allocated_by: string
-          entity_id: string
-          entity_type: string
-          id: string
-          notes: string | null
-          quantity: number | null
-          released_at: string | null
-          resource_id: string | null
-        }
-        Insert: {
-          allocated_at?: string | null
-          allocated_by: string
-          entity_id: string
-          entity_type: string
-          id?: string
-          notes?: string | null
-          quantity?: number | null
-          released_at?: string | null
-          resource_id?: string | null
-        }
-        Update: {
-          allocated_at?: string | null
-          allocated_by?: string
-          entity_id?: string
-          entity_type?: string
-          id?: string
-          notes?: string | null
-          quantity?: number | null
-          released_at?: string | null
-          resource_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "resource_allocations_resource_id_fkey"
-            columns: ["resource_id"]
-            isOneToOne: false
-            referencedRelation: "resources"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      resources: {
-        Row: {
-          company_id: string
-          created_at: string | null
-          custom_fields: Json | null
-          id: string
-          name: string
-          quantity: number | null
-          status: string | null
-          type: string
-          unit: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          company_id: string
-          created_at?: string | null
-          custom_fields?: Json | null
-          id?: string
-          name: string
-          quantity?: number | null
-          status?: string | null
-          type: string
-          unit?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          company_id?: string
-          created_at?: string | null
-          custom_fields?: Json | null
-          id?: string
-          name?: string
-          quantity?: number | null
-          status?: string | null
-          type?: string
-          unit?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "resources_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      sprints: {
-        Row: {
-          company_id: string
-          created_at: string | null
-          created_by: string
-          description: string | null
-          end_date: string
-          goal: string | null
-          id: string
-          name: string
-          start_date: string
-          status: string
-          updated_at: string | null
-        }
-        Insert: {
-          company_id: string
-          created_at?: string | null
-          created_by: string
-          description?: string | null
-          end_date: string
-          goal?: string | null
-          id?: string
-          name: string
-          start_date: string
-          status?: string
-          updated_at?: string | null
-        }
-        Update: {
-          company_id?: string
-          created_at?: string | null
-          created_by?: string
-          description?: string | null
-          end_date?: string
-          goal?: string | null
-          id?: string
-          name?: string
-          start_date?: string
-          status?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "sprints_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      team_members: {
-        Row: {
-          added_at: string
-          added_by: string
-          id: string
-          role: string | null
-          team_id: string
-          worker_id: string
-        }
-        Insert: {
-          added_at?: string
-          added_by: string
-          id?: string
-          role?: string | null
-          team_id: string
-          worker_id: string
-        }
-        Update: {
-          added_at?: string
-          added_by?: string
-          id?: string
-          role?: string | null
-          team_id?: string
-          worker_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "team_members_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "team_members_worker_id_fkey"
-            columns: ["worker_id"]
-            isOneToOne: false
-            referencedRelation: "workers"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      team_tasks: {
-        Row: {
-          assigned_at: string
-          assigned_by: string
-          assigned_to_worker_id: string | null
-          created_at: string
-          daily_updates: Json | null
-          deadline: string | null
-          description: string | null
-          id: string
-          job_id: string | null
-          job_task_id: string | null
-          progress_percentage: number | null
-          status: string
-          team_id: string
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          assigned_at?: string
-          assigned_by: string
-          assigned_to_worker_id?: string | null
-          created_at?: string
-          daily_updates?: Json | null
-          deadline?: string | null
-          description?: string | null
-          id?: string
-          job_id?: string | null
-          job_task_id?: string | null
-          progress_percentage?: number | null
-          status?: string
-          team_id: string
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          assigned_at?: string
-          assigned_by?: string
-          assigned_to_worker_id?: string | null
-          created_at?: string
-          daily_updates?: Json | null
-          deadline?: string | null
-          description?: string | null
-          id?: string
-          job_id?: string | null
-          job_task_id?: string | null
-          progress_percentage?: number | null
-          status?: string
-          team_id?: string
-          title?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "team_tasks_assigned_to_worker_id_fkey"
-            columns: ["assigned_to_worker_id"]
-            isOneToOne: false
-            referencedRelation: "workers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "team_tasks_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "team_tasks_job_task_id_fkey"
-            columns: ["job_task_id"]
-            isOneToOne: false
-            referencedRelation: "job_tasks"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "team_tasks_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      teams: {
-        Row: {
-          company_id: string
-          created_at: string
-          created_by: string
-          id: string
-          name: string
-          team_head_id: string | null
-          updated_at: string
-          vendor_id: string | null
-        }
-        Insert: {
-          company_id: string
-          created_at?: string
-          created_by: string
-          id?: string
-          name: string
-          team_head_id?: string | null
-          updated_at?: string
-          vendor_id?: string | null
-        }
-        Update: {
-          company_id?: string
-          created_at?: string
-          created_by?: string
-          id?: string
-          name?: string
-          team_head_id?: string | null
-          updated_at?: string
-          vendor_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "teams_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "teams_team_head_id_fkey"
-            columns: ["team_head_id"]
-            isOneToOne: false
-            referencedRelation: "workers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "teams_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      time_entries: {
-        Row: {
-          billable: boolean
           created_at: string
           description: string | null
-          end_time: string | null
-          hours: number
-          id: string
-          job_id: string
-          job_task_id: string | null
-          start_time: string
-          updated_at: string
-          worker_id: string
-        }
-        Insert: {
-          billable?: boolean
-          created_at?: string
-          description?: string | null
-          end_time?: string | null
-          hours?: number
-          id?: string
-          job_id: string
-          job_task_id?: string | null
-          start_time?: string
-          updated_at?: string
-          worker_id: string
-        }
-        Update: {
-          billable?: boolean
-          created_at?: string
-          description?: string | null
-          end_time?: string | null
-          hours?: number
-          id?: string
-          job_id?: string
-          job_task_id?: string | null
-          start_time?: string
-          updated_at?: string
-          worker_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "time_entries_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "time_entries_job_task_id_fkey"
-            columns: ["job_task_id"]
-            isOneToOne: false
-            referencedRelation: "job_tasks"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "time_entries_worker_id_fkey"
-            columns: ["worker_id"]
-            isOneToOne: false
-            referencedRelation: "workers"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_roles: {
-        Row: {
-          company_id: string
-          created_at: string
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Insert: {
-          company_id: string
-          created_at?: string
-          id?: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Update: {
-          company_id?: string
-          created_at?: string
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_roles_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      vendor_companies: {
-        Row: {
-          company_id: string
-          created_at: string | null
           id: string
           is_active: boolean | null
-          vendor_id: string
+          logo_url: string | null
+          name: string
+          slug: string
+          updated_at: string
         }
         Insert: {
-          company_id: string
-          created_at?: string | null
+          created_at?: string
+          description?: string | null
           id?: string
           is_active?: boolean | null
-          vendor_id: string
+          logo_url?: string | null
+          name: string
+          slug: string
+          updated_at?: string
         }
         Update: {
-          company_id?: string
-          created_at?: string | null
+          created_at?: string
+          description?: string | null
           id?: string
           is_active?: boolean | null
-          vendor_id?: string
+          logo_url?: string | null
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cart_items: {
+        Row: {
+          created_at: string
+          customer_id: string | null
+          id: string
+          product_id: string
+          quantity: number
+          session_id: string | null
+          updated_at: string
+          variant_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          product_id: string
+          quantity?: number
+          session_id?: string | null
+          updated_at?: string
+          variant_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          product_id?: string
+          quantity?: number
+          session_id?: string | null
+          updated_at?: string
+          variant_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "vendor_companies_company_id_fkey"
-            columns: ["company_id"]
+            foreignKeyName: "cart_items_customer_id_fkey"
+            columns: ["customer_id"]
             isOneToOne: false
-            referencedRelation: "companies"
+            referencedRelation: "customers"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "vendor_companies_vendor_id_fkey"
-            columns: ["vendor_id"]
+            foreignKeyName: "cart_items_product_id_fkey"
+            columns: ["product_id"]
             isOneToOne: false
-            referencedRelation: "vendors"
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cart_items_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "product_variants"
             referencedColumns: ["id"]
           },
         ]
       }
-      vendors: {
+      categories: {
         Row: {
-          company_id: string
           created_at: string
-          email: string
+          description: string | null
+          display_order: number | null
           id: string
+          image_url: string | null
+          is_active: boolean | null
           name: string
-          timezone: string | null
+          parent_id: string | null
+          slug: string
           updated_at: string
-          user_id: string
         }
         Insert: {
-          company_id: string
           created_at?: string
-          email: string
+          description?: string | null
+          display_order?: number | null
           id?: string
+          image_url?: string | null
+          is_active?: boolean | null
           name: string
-          timezone?: string | null
+          parent_id?: string | null
+          slug: string
           updated_at?: string
-          user_id: string
         }
         Update: {
-          company_id?: string
           created_at?: string
-          email?: string
+          description?: string | null
+          display_order?: number | null
           id?: string
+          image_url?: string | null
+          is_active?: boolean | null
           name?: string
-          timezone?: string | null
+          parent_id?: string | null
+          slug?: string
           updated_at?: string
-          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "vendors_company_id_fkey"
-            columns: ["company_id"]
+            foreignKeyName: "categories_parent_id_fkey"
+            columns: ["parent_id"]
             isOneToOne: false
-            referencedRelation: "companies"
+            referencedRelation: "categories"
             referencedColumns: ["id"]
           },
         ]
       }
-      workers: {
+      coupons: {
         Row: {
-          company_id: string
+          code: string
           created_at: string
-          email: string
+          description: string | null
+          discount_type: string
+          discount_value: number
           id: string
-          name: string
-          role: string | null
-          team_role: string | null
-          timezone: string | null
-          updated_at: string
-          user_id: string
-          vendor_id: string | null
+          is_active: boolean | null
+          max_discount: number | null
+          min_order_amount: number | null
+          usage_limit: number | null
+          used_count: number | null
+          valid_from: string
+          valid_until: string
         }
         Insert: {
-          company_id: string
+          code: string
           created_at?: string
-          email: string
+          description?: string | null
+          discount_type: string
+          discount_value: number
           id?: string
-          name: string
-          role?: string | null
-          team_role?: string | null
-          timezone?: string | null
-          updated_at?: string
-          user_id: string
-          vendor_id?: string | null
+          is_active?: boolean | null
+          max_discount?: number | null
+          min_order_amount?: number | null
+          usage_limit?: number | null
+          used_count?: number | null
+          valid_from: string
+          valid_until: string
         }
         Update: {
-          company_id?: string
+          code?: string
           created_at?: string
-          email?: string
+          description?: string | null
+          discount_type?: string
+          discount_value?: number
           id?: string
-          name?: string
-          role?: string | null
-          team_role?: string | null
-          timezone?: string | null
+          is_active?: boolean | null
+          max_discount?: number | null
+          min_order_amount?: number | null
+          usage_limit?: number | null
+          used_count?: number | null
+          valid_from?: string
+          valid_until?: string
+        }
+        Relationships: []
+      }
+      customer_addresses: {
+        Row: {
+          address_line1: string
+          address_line2: string | null
+          address_type: string | null
+          city: string
+          country: string | null
+          created_at: string
+          customer_id: string
+          id: string
+          is_default: boolean | null
+          name: string
+          phone: string
+          pincode: string
+          state: string
+          updated_at: string
+        }
+        Insert: {
+          address_line1: string
+          address_line2?: string | null
+          address_type?: string | null
+          city: string
+          country?: string | null
+          created_at?: string
+          customer_id: string
+          id?: string
+          is_default?: boolean | null
+          name: string
+          phone: string
+          pincode: string
+          state: string
           updated_at?: string
-          user_id?: string
-          vendor_id?: string | null
+        }
+        Update: {
+          address_line1?: string
+          address_line2?: string | null
+          address_type?: string | null
+          city?: string
+          country?: string | null
+          created_at?: string
+          customer_id?: string
+          id?: string
+          is_default?: boolean | null
+          name?: string
+          phone?: string
+          pincode?: string
+          state?: string
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "workers_company_id_fkey"
-            columns: ["company_id"]
+            foreignKeyName: "customer_addresses_customer_id_fkey"
+            columns: ["customer_id"]
             isOneToOne: false
-            referencedRelation: "companies"
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customers: {
+        Row: {
+          created_at: string
+          email: string
+          gender: string | null
+          id: string
+          name: string | null
+          phone: string | null
+          preferred_size: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          gender?: string | null
+          id?: string
+          name?: string | null
+          phone?: string | null
+          preferred_size?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          gender?: string | null
+          id?: string
+          name?: string | null
+          phone?: string | null
+          preferred_size?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      order_items: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          order_id: string
+          product_id: string
+          product_name: string
+          quantity: number
+          size: string
+          total_price: number
+          unit_price: number
+          variant_id: string
+          variant_sku: string
+        }
+        Insert: {
+          color: string
+          created_at?: string
+          id?: string
+          order_id: string
+          product_id: string
+          product_name: string
+          quantity: number
+          size: string
+          total_price: number
+          unit_price: number
+          variant_id: string
+          variant_sku: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          order_id?: string
+          product_id?: string
+          product_name?: string
+          quantity?: number
+          size?: string
+          total_price?: number
+          unit_price?: number
+          variant_id?: string
+          variant_sku?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "workers_vendor_id_fkey"
-            columns: ["vendor_id"]
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
             isOneToOne: false
-            referencedRelation: "vendors"
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "product_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          billing_address: Json | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          coupon_code: string | null
+          coupon_id: string | null
+          created_at: string
+          customer_email: string
+          customer_id: string | null
+          customer_phone: string
+          delivered_at: string | null
+          discount_amount: number | null
+          id: string
+          notes: string | null
+          order_number: string
+          order_status: string
+          payment_id: string | null
+          payment_method: string
+          payment_status: string
+          shipped_at: string | null
+          shipping_address: Json
+          shipping_amount: number | null
+          subtotal: number
+          tax_amount: number | null
+          total_amount: number
+          tracking_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          billing_address?: Json | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          coupon_code?: string | null
+          coupon_id?: string | null
+          created_at?: string
+          customer_email: string
+          customer_id?: string | null
+          customer_phone: string
+          delivered_at?: string | null
+          discount_amount?: number | null
+          id?: string
+          notes?: string | null
+          order_number: string
+          order_status?: string
+          payment_id?: string | null
+          payment_method: string
+          payment_status?: string
+          shipped_at?: string | null
+          shipping_address: Json
+          shipping_amount?: number | null
+          subtotal: number
+          tax_amount?: number | null
+          total_amount: number
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          billing_address?: Json | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          coupon_code?: string | null
+          coupon_id?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_id?: string | null
+          customer_phone?: string
+          delivered_at?: string | null
+          discount_amount?: number | null
+          id?: string
+          notes?: string | null
+          order_number?: string
+          order_status?: string
+          payment_id?: string | null
+          payment_method?: string
+          payment_status?: string
+          shipped_at?: string | null
+          shipping_address?: Json
+          shipping_amount?: number | null
+          subtotal?: number
+          tax_amount?: number | null
+          total_amount?: number
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "coupons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_images: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          display_order: number | null
+          id: string
+          image_url: string
+          is_primary: boolean | null
+          product_id: string
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url: string
+          is_primary?: boolean | null
+          product_id: string
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          is_primary?: boolean | null
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_variants: {
+        Row: {
+          color: string
+          color_hex: string | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          price_adjustment: number | null
+          product_id: string
+          size: string
+          sku: string
+          stock_quantity: number
+          updated_at: string
+        }
+        Insert: {
+          color: string
+          color_hex?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          price_adjustment?: number | null
+          product_id: string
+          size: string
+          sku: string
+          stock_quantity?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          color_hex?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          price_adjustment?: number | null
+          product_id?: string
+          size?: string
+          sku?: string
+          stock_quantity?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          base_price: number
+          brand_id: string | null
+          category_id: string | null
+          created_at: string
+          description: string | null
+          features: string[] | null
+          gender: string
+          id: string
+          is_active: boolean | null
+          is_bestseller: boolean | null
+          is_featured: boolean | null
+          is_new: boolean | null
+          material: string | null
+          meta_description: string | null
+          meta_title: string | null
+          name: string
+          occasion: string[] | null
+          rating: number | null
+          review_count: number | null
+          sale_price: number | null
+          short_description: string | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          base_price: number
+          brand_id?: string | null
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          gender: string
+          id?: string
+          is_active?: boolean | null
+          is_bestseller?: boolean | null
+          is_featured?: boolean | null
+          is_new?: boolean | null
+          material?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
+          name: string
+          occasion?: string[] | null
+          rating?: number | null
+          review_count?: number | null
+          sale_price?: number | null
+          short_description?: string | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          base_price?: number
+          brand_id?: string | null
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          gender?: string
+          id?: string
+          is_active?: boolean | null
+          is_bestseller?: boolean | null
+          is_featured?: boolean | null
+          is_new?: boolean | null
+          material?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
+          name?: string
+          occasion?: string[] | null
+          rating?: number | null
+          review_count?: number | null
+          sale_price?: number | null
+          short_description?: string | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          comfort_rating: number | null
+          comment: string | null
+          created_at: string
+          customer_id: string | null
+          fit_rating: string | null
+          helpful_count: number | null
+          id: string
+          images: string[] | null
+          is_approved: boolean | null
+          is_verified_purchase: boolean | null
+          order_id: string | null
+          product_id: string
+          rating: number
+          title: string | null
+        }
+        Insert: {
+          comfort_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          customer_id?: string | null
+          fit_rating?: string | null
+          helpful_count?: number | null
+          id?: string
+          images?: string[] | null
+          is_approved?: boolean | null
+          is_verified_purchase?: boolean | null
+          order_id?: string | null
+          product_id: string
+          rating: number
+          title?: string | null
+        }
+        Update: {
+          comfort_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          customer_id?: string | null
+          fit_rating?: string | null
+          helpful_count?: number | null
+          id?: string
+          images?: string[] | null
+          is_approved?: boolean | null
+          is_verified_purchase?: boolean | null
+          order_id?: string | null
+          product_id?: string
+          rating?: number
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_settings: {
+        Row: {
+          id: string
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          id?: string
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      wishlist: {
+        Row: {
+          created_at: string
+          customer_id: string
+          id: string
+          product_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          id?: string
+          product_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          id?: string
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wishlist_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wishlist_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
             referencedColumns: ["id"]
           },
         ]
@@ -1296,29 +852,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
       is_company_admin: {
         Args: { _company_id: string; _user_id?: string }
         Returns: boolean
       }
     }
     Enums: {
-      app_role: "company" | "vendor" | "worker"
-      job_status:
-        | "draft"
-        | "created"
-        | "pending"
-        | "assigned"
-        | "in_progress"
-        | "completed"
-        | "on_hold"
-        | "cancelled"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1445,18 +985,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      app_role: ["company", "vendor", "worker"],
-      job_status: [
-        "draft",
-        "created",
-        "pending",
-        "assigned",
-        "in_progress",
-        "completed",
-        "on_hold",
-        "cancelled",
-      ],
-    },
+    Enums: {},
   },
 } as const
