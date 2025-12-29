@@ -1,97 +1,71 @@
-import { useEffect, useState } from "react";
-import { User, Session } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from 'react';
+import { User, Session } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
 
-interface UserRole {
-  role: "company" | "vendor" | "worker";
-  company_id: string;
+interface AdminUser {
+  id: string;
+  user_id: string;
+  email: string;
+  name: string;
+  role: string;
 }
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const fetchUserRole = async (userId: string) => {
-    try {
-      const { data: roleData, error } = await supabase
-        .from("user_roles")
-        .select("role, company_id")
-        .eq("user_id", userId)
-        .single();
-
-      if (error) {
-        console.error("Error fetching user role:", error);
-        return null;
-      }
-
-      return roleData ? {
-        role: roleData.role as "company" | "vendor" | "worker",
-        company_id: roleData.company_id,
-      } : null;
-    } catch (error) {
-      console.error("Error in fetchUserRole:", error);
-      return null;
+  const fetchAdminUser = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+    
+    if (data && !error) {
+      setAdminUser(data);
+      setIsAdmin(true);
+    } else {
+      setAdminUser(null);
+      setIsAdmin(false);
     }
   };
 
   useEffect(() => {
-    // Initialize auth state
-    const initAuth = async () => {
-      try {
-        const { data: { session: initialSession } } = await supabase.auth.getSession();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
         
-        setSession(initialSession);
-        setUser(initialSession?.user ?? null);
-        
-        if (initialSession?.user) {
-          const role = await fetchUserRole(initialSession.user.id);
-          setUserRole(role);
+        if (session?.user) {
+          setTimeout(() => fetchAdminUser(session.user.id), 0);
+        } else {
+          setAdminUser(null);
+          setIsAdmin(false);
         }
-      } catch (error) {
-        console.error("Error initializing auth:", error);
-      } finally {
         setLoading(false);
       }
-    };
+    );
 
-    initAuth();
-
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, newSession) => {
-      console.log("Auth state changed:", event);
-      
-      setSession(newSession);
-      setUser(newSession?.user ?? null);
-      
-      if (newSession?.user && event !== 'SIGNED_OUT') {
-        setTimeout(async () => {
-          const role = await fetchUserRole(newSession.user.id);
-          setUserRole(role);
-          setLoading(false);
-        }, 0);
-      } else {
-        setUserRole(null);
-        setLoading(false);
-      }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      if (session?.user) fetchAdminUser(session.user.id);
+      setLoading(false);
     });
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, []);
 
   const signOut = async () => {
-    try {
-      await supabase.auth.signOut();
-      setUser(null);
-      setSession(null);
-      setUserRole(null);
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
+    await supabase.auth.signOut();
+    setUser(null);
+    setSession(null);
+    setAdminUser(null);
+    setIsAdmin(false);
   };
 
-  return { user, session, userRole, loading, signOut };
+  return { user, session, adminUser, isAdmin, loading, signOut };
 };
